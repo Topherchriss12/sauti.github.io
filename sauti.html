@@ -3,846 +3,1652 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sauti: your voice, on air</title>
-<meta name="description" content="Sauti makes it simple to run your own internet radio station. Add your music, plan your week, go live whenever you like, and let people listen from anywhere.">
-<meta name="theme-color" content="#1B1033">
-<meta property="og:title" content="Sauti: your voice, on air">
-<meta property="og:description" content="Run your own internet radio station without the technical headaches. Music, schedule and live shows in one simple place.">
+<title>Sauti — Keep the station on</title>
+<meta name="description" content="Sauti is internet radio for small stations with real voices: a weekly schedule, live presenter hand-back, layered fallbacks, and a listener page that needs no app. Five pilot places open.">
+<meta name="theme-color" content="#f1eadc">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="Sauti — Keep the station on">
+<meta property="og:description" content="A control room for stations run by people, not racks. Weekly schedules, live takeovers that hand back, and no dead air.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231B1033'/%3E%3Cpath d='M14 36v-8M22 42V22M30 46V18M38 42V22M46 38V26M54 34v-4' stroke='%23FFB020' stroke-width='4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
-<script>document.documentElement.classList.add('js');</script>
-<style>
-/* =========================================================
-   Sauti landing page
-   Palette: Night Plum, Dusk Violet, Sunrise Coral, Marigold, Lagoon, Paper
-   Type: system fonts only (no downloads): heavy display, plain body, mono for the dial
-   Signature: the page header is a radio tuning dial; scrolling tunes the needle.
-   ========================================================= */
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2317140f'/%3E%3Cpath d='M12 32h6m4-10v20m8-28v36m8-26v16m8-22v28m8-16v4' stroke='%23f1eadc' stroke-width='4' stroke-linecap='square'/%3E%3C/svg%3E">
+<style id="base">
 :root{
-  --plum:#1B1033; --plum-2:#2A1752; --violet:#3B2A6B;
-  --coral:#FF5A5F; --coral-deep:#C42B4A; --marigold:#FFB020; --marigold-deep:#8A5A00;
-  --lagoon:#19C2AE; --lagoon-deep:#0B6F63;
-  --paper:#FBF8FF; --card:#FFFFFF; --ink:#1B1033; --muted:#544B6E; --line:#E7E0F6;
-  --radius:22px; --header-h:72px;
-  --display: ui-rounded, "SF Pro Rounded", "Avenir Next", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
-  --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --paper:#f1eadc;
+  --paper-2:#e8ddc9;
+  --paper-3:#faf4e7;
+  --ink:#17140f;
+  --ink-2:#3d362b;
+  --red:#ab3721;
+  --red-dark:#91311f;
+  --amber:#e3aa3c;
+  --amber-ink:#7a5000;
+  --teal:#1e6e63;
+  --line:rgba(23,20,15,.17);
+  --line-strong:rgba(23,20,15,.45);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"SFMono-Regular","Cascadia Mono","Liberation Mono",Menlo,Consolas,monospace;
+  --wrap:1180px;
+  --head:76px;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 12px);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.65 var(--body);overflow-x:hidden}
-img,svg{max-width:100%;display:block}
-a{color:inherit}
-h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin:0}
-p{margin:0}
-:focus-visible{outline:3px solid var(--marigold);outline-offset:3px;border-radius:8px}
-.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
-.skip{position:absolute;left:12px;top:-60px;background:var(--marigold);color:var(--plum);padding:10px 16px;border-radius:10px;font-weight:700;z-index:100;text-decoration:none}
-.skip:focus{top:12px}
-.eyebrow{font:600 .78rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--coral-deep)}
-.dark .eyebrow{color:var(--marigold)}
-.lead{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--muted);max-width:60ch}
-section{position:relative}
-.sec{padding:clamp(72px,10vw,128px) 0}
-.sec h2{font-size:clamp(2rem,4.6vw,3.4rem);margin:14px 0 18px;max-width:18ch}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font:700 1rem/1 var(--body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s ease,color .2s ease}
-.btn:hover{transform:translateY(-3px)}
-.btn--primary{background:var(--marigold);color:var(--plum);box-shadow:0 10px 30px -10px rgba(255,176,32,.7)}
-.btn--primary:hover{box-shadow:0 16px 34px -10px rgba(255,176,32,.9)}
-.btn--ghost{color:#fff;border-color:rgba(255,255,255,.45)}
-.btn--ghost:hover{background:rgba(255,255,255,.12);border-color:#fff}
-.btn svg{width:18px;height:18px;transition:transform .2s ease}
-.btn:hover svg{transform:translateX(4px)}
-
-/* reveal on scroll (only when JS is running) */
-.js .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
-.js .reveal.in{opacity:1;transform:none}
-.js .reveal[data-d="1"]{transition-delay:.08s}.js .reveal[data-d="2"]{transition-delay:.16s}.js .reveal[data-d="3"]{transition-delay:.24s}
-
-/* ================= HEADER = TUNING DIAL ================= */
-.console{position:sticky;top:0;z-index:50;background:rgba(27,16,51,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.1);color:#fff}
-.console .wrap{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px 28px;min-height:var(--header-h)}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 1.5rem/1 var(--display);letter-spacing:-.03em}
-.brand svg{width:34px;height:34px}
-.dial{min-width:0;padding:10px 0 6px}
-.dial ul{list-style:none;margin:0;padding:0;display:flex;justify-content:space-between}
-.dial li{flex:1;text-align:center}
-.dial a{display:inline-block;padding:6px 4px;text-decoration:none;font:600 .78rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.62);transition:color .25s ease}
-.dial a:hover{color:#fff}
-.dial a[aria-current="location"]{color:var(--marigold)}
-.scale{position:relative;height:18px;margin-top:2px;
-  background:
-    repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 1px,transparent 1px 40px) 0 0/100% 14px no-repeat,
-    repeating-linear-gradient(90deg,rgba(255,255,255,.28) 0 1px,transparent 1px 8px) 0 0/100% 8px no-repeat;
-  border-bottom:1px solid rgba(255,255,255,.2)}
-.needle{position:absolute;top:-2px;left:0;width:2px;height:20px;background:var(--marigold);box-shadow:0 0 10px 1px rgba(255,176,32,.9);transform:translateX(var(--x,0px));transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.needle::before{content:"";position:absolute;left:-4px;top:-5px;border:5px solid transparent;border-top-color:var(--marigold);border-bottom:0}
-.readout{font:600 .72rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:right;min-width:9.5em}
-.readout b{display:block;color:var(--marigold);font-weight:700;font-size:.82rem}
-@media (max-width:820px){
-  :root{--header-h:104px}
-  .console .wrap{grid-template-columns:1fr auto;gap:0 16px;padding-top:8px}
-  .dial{grid-column:1/-1;grid-row:2;padding:2px 0 8px}
-  .readout{min-width:0}
-  .dial a{font-size:.7rem;letter-spacing:.06em}
+*,*::before,*::after{box-sizing:border-box}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:var(--head);
+  background:var(--paper);
 }
-@media (max-width:430px){.readout{display:none}.brand{font-size:1.35rem}}
-
-/* ================= HERO ================= */
-.hero.dark{background:
-   radial-gradient(60% 50% at 78% 108%,rgba(255,176,32,.95) 0,rgba(255,90,95,.75) 35%,rgba(255,90,95,0) 70%),
-   linear-gradient(180deg,var(--plum) 0%,var(--plum-2) 52%,#6A2A7C 82%,#C4416B 100%);
-  color:#fff;overflow:hidden;padding:clamp(56px,8vw,104px) 0 clamp(150px,16vw,220px)}
-.hero .wrap{display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center;position:relative;z-index:2}
-.hero h1{font-size:clamp(2.7rem,7.2vw,5.6rem);letter-spacing:-.04em;line-height:.98}
-.hero h1 span{display:block}
-.hero h1 .air{position:relative;display:inline-block;color:var(--marigold)}
-.squig{position:absolute;left:-2%;bottom:-.22em;width:104%;height:.3em;overflow:visible}
-.squig path{fill:none;stroke:var(--coral);stroke-width:5;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;animation:draw 1.1s .9s cubic-bezier(.4,.1,.2,1) forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-.hero .lead{color:rgba(255,255,255,.82);margin:28px 0 34px;max-width:46ch}
-.cta-row{display:flex;flex-wrap:wrap;gap:14px}
-.assure{display:flex;flex-wrap:wrap;gap:8px 22px;margin:34px 0 0;padding:0;list-style:none;color:rgba(255,255,255,.75);font-size:.95rem}
-.assure li{display:flex;align-items:center;gap:8px}
-.assure svg{width:18px;height:18px;color:var(--lagoon)}
-.hero-in{opacity:0;transform:translateY(22px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
-.hero-in:nth-child(1){animation-delay:.05s}.hero-in:nth-child(2){animation-delay:.2s}.hero-in:nth-child(3){animation-delay:.4s}.hero-in:nth-child(4){animation-delay:.55s}
-@keyframes rise{to{opacity:1;transform:none}}
-.rings{position:absolute;right:max(-120px,calc(50% - 760px));bottom:-260px;width:min(760px,120vw);aspect-ratio:1;z-index:1;pointer-events:none}
-.rings circle{fill:none;stroke:#fff;stroke-opacity:.2;stroke-width:2;transform-origin:center;animation:ping 6s ease-out infinite}
-.rings circle:nth-child(2){animation-delay:1.5s}.rings circle:nth-child(3){animation-delay:3s}.rings circle:nth-child(4){animation-delay:4.5s}
-@keyframes ping{0%{transform:scale(.25);opacity:0}15%{opacity:1}100%{transform:scale(1);opacity:0}}
-.hero .tail{position:absolute;left:0;right:0;bottom:-1px;height:clamp(50px,7vw,110px);z-index:2;color:var(--paper)}
-
-/* on-air demo card */
-.station{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22);border-radius:var(--radius);padding:22px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
-.station header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-.station h2{font-size:1.25rem;letter-spacing:-.02em}
-.tag{font:600 .68rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);border:1px dashed rgba(255,255,255,.4);padding:5px 8px;border-radius:6px}
-.pill{display:inline-flex;align-items:center;gap:8px;font:700 .8rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:rgba(25,194,174,.18);color:#7BF0E0;border:1px solid rgba(25,194,174,.5);transition:all .3s ease}
-.pill i{width:8px;height:8px;border-radius:50%;background:currentColor;animation:blink 1.6s ease-in-out infinite}
-@keyframes blink{50%{opacity:.25}}
-.station[data-mode="live"] .pill{background:rgba(255,90,95,.2);color:#FFB3B5;border-color:rgba(255,90,95,.65)}
-.eq{display:flex;align-items:flex-end;gap:4px;height:84px;margin:18px 0 6px}
-.eq i{flex:1;min-width:3px;border-radius:3px;background:linear-gradient(180deg,var(--lagoon),#7BF0E0);height:30%;animation:eq var(--t,1.1s) ease-in-out var(--dl,0s) infinite alternate;transform-origin:bottom;transition:background .4s ease}
-.station[data-mode="live"] .eq i{background:linear-gradient(180deg,var(--coral),var(--marigold));animation-duration:calc(var(--t,1.1s) * .55)}
-@keyframes eq{from{height:12%}to{height:var(--h,80%)}}
-.now{font-weight:700;font-size:1.1rem;margin:14px 0 4px;min-height:1.6em}
-.next{color:rgba(255,255,255,.75);font-size:.98rem;min-height:3.1em}
-.bar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin:14px 0 4px}
-.bar b{display:block;height:100%;width:0;background:var(--marigold);border-radius:99px;animation:fill 14s linear infinite}
-.station[data-mode="live"] .bar b{width:100%;animation:none;background:var(--coral)}
-@keyframes fill{from{width:4%}to{width:100%}}
-.switch{margin-top:18px}
-.switch p{font:600 .74rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:10px}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(0,0,0,.28);padding:5px;border-radius:999px}
-.seg button{font:700 .95rem/1 var(--body);border:0;border-radius:999px;padding:13px 10px;color:rgba(255,255,255,.8);background:transparent;cursor:pointer;transition:background .25s,color .25s,transform .2s}
-.seg button:hover{color:#fff}
-.seg button[aria-pressed="true"]{background:#fff;color:var(--plum)}
-.station small{display:block;margin-top:14px;color:rgba(255,255,255,.55);font-size:.8rem}
-@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:40px}}
-
-/* ================= ABOUT ================= */
-.about{overflow:hidden}
-.about .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
-.about .b1{width:420px;height:420px;background:#FFD9A0;right:-120px;top:40px}
-.about .b2{width:360px;height:360px;background:#D9CCFF;left:-140px;bottom:-60px}
-.about .wrap{position:relative;z-index:1}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:start}
-.about-grid p+p{margin-top:16px}
-.say{font:700 1.15rem/1.4 var(--display);color:var(--plum);background:#fff;border:1px solid var(--line);border-left:6px solid var(--marigold);border-radius:14px;padding:18px 20px;margin-top:26px;box-shadow:0 12px 30px -18px rgba(27,16,51,.35)}
-.say b{color:var(--coral-deep)}
-.promises{display:grid;gap:14px}
-.promise{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
-.promise:hover{transform:translateX(6px);box-shadow:0 18px 36px -22px rgba(27,16,51,.45);border-color:var(--marigold)}
-.promise .ic{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center}
-.promise .ic svg{width:26px;height:26px}
-.promise h3{font-size:1.2rem;margin-bottom:4px}
-.promise p{color:var(--muted);font-size:1rem;line-height:1.55}
-.ic.c1{background:#FFE5E6;color:var(--coral-deep)}.ic.c2{background:#FFF0D1;color:var(--marigold-deep)}.ic.c3{background:#D7F5F0;color:var(--lagoon-deep)}.ic.c4{background:#E8E1FF;color:var(--violet)}
-.for{margin-top:clamp(48px,6vw,72px)}
-.for h3{font-size:1.25rem;margin-bottom:16px}
-.chips{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin:0;padding:0}
-.chips li{padding:11px 18px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:600;cursor:default;transition:transform .2s ease,background .2s ease,color .2s ease,border-color .2s ease}
-.chips li:hover{transform:translateY(-4px) rotate(-1.5deg);background:var(--plum);color:#fff;border-color:var(--plum)}
-@media (max-width:860px){.about-grid{grid-template-columns:1fr}.sec h2{max-width:none}}
-
-/* ================= HOW IT WORKS ================= */
-.how{background:linear-gradient(180deg,#fff 0,#F3EDFF 100%);border-block:1px solid var(--line)}
-.how-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px}
-.tabs{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:0 30px 60px -40px rgba(27,16,51,.5);overflow:hidden}
-.tablist{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);background:#FAF6FF}
-.tab{display:flex;align-items:center;gap:12px;padding:20px 18px;border:0;background:transparent;font:700 1rem/1.2 var(--body);color:var(--muted);cursor:pointer;text-align:left;position:relative;transition:color .2s,background .2s}
-.tab .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 .9rem/1 var(--mono);background:#fff;border:2px solid var(--line);color:var(--muted);transition:all .25s ease}
-.tab:hover{color:var(--ink);background:#fff}
-.tab[aria-selected="true"]{color:var(--ink);background:#fff}
-.tab[aria-selected="true"] .n{background:var(--coral);border-color:var(--coral);color:#fff;transform:scale(1.1)}
-.tab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:linear-gradient(90deg,var(--coral),var(--marigold))}
-.panel{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(24px,5vw,56px)}
-.panel[hidden]{display:none}
-.js .panel:not([hidden]){animation:swap .5s ease both}
-@keyframes swap{from{opacity:0;transform:translateY(10px)}}
-.panel h3{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
-.panel p{color:var(--muted)}
-.panel ul{list-style:none;margin:18px 0 24px;padding:0;display:grid;gap:10px}
-.panel li{display:flex;gap:12px;align-items:flex-start}
-.panel li svg{flex:none;width:22px;height:22px;margin-top:3px;color:var(--lagoon-deep)}
-.next-step{display:inline-flex;align-items:center;gap:8px;font:700 1rem/1 var(--body);color:var(--coral-deep);background:none;border:0;padding:6px 0;cursor:pointer;text-decoration:none}
-.next-step svg{width:18px;height:18px;transition:transform .2s}.next-step:hover svg{transform:translateX(5px)}
-.art{border-radius:24px;aspect-ratio:5/4;display:grid;place-items:center;padding:20px;overflow:hidden}
-.art svg{width:100%;height:100%}
-.art.a1{background:linear-gradient(140deg,#FFE5E6,#FFD9A0)}.art.a2{background:linear-gradient(140deg,#E8E1FF,#D7F5F0)}.art.a3{background:linear-gradient(140deg,#FFD9A0,#FFB3B5)}.art.a4{background:linear-gradient(140deg,#D7F5F0,#E8E1FF)}
-.noscript-note{display:none}
+body{
+  margin:0;
+  min-width:320px;
+  overflow-x:hidden;
+  color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(circle at 88% 5%,rgba(189,67,43,.12),transparent 27rem),
+    radial-gradient(circle at 2% 48%,rgba(30,110,99,.08),transparent 25rem),
+    linear-gradient(rgba(23,20,15,.026) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(23,20,15,.026) 1px,transparent 1px);
+  background-size:auto,auto,32px 32px,32px 32px;
+  font-family:var(--sans);
+  font-size:1rem;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--amber);color:var(--ink)}
+h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1;letter-spacing:-.035em}
+ul,ol{margin:0;padding:0;list-style:none}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration-thickness:.08em;text-underline-offset:.18em}
+a:hover{color:var(--red-dark)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+.wrap{width:min(var(--wrap),calc(100% - clamp(32px,6vw,72px)));margin-inline:auto}
+.skip-link{
+  position:absolute;
+  left:16px;
+  top:-80px;
+  z-index:100;
+  padding:10px 14px;
+  background:var(--amber);
+  border:1.5px solid var(--ink);
+  color:var(--ink);
+  font:600 .72rem/1 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-decoration:none;
+}
+.skip-link:focus{top:12px}
+.kicker{
+  font:600 .68rem/1.3 var(--mono);
+  letter-spacing:.155em;
+  text-transform:uppercase;
+}
+.lede{
+  max-width:60ch;
+  color:var(--ink-2);
+  font-size:clamp(1.02rem,1.35vw,1.2rem);
+  line-height:1.6;
+}
+.button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:46px;
+  padding:12px 17px;
+  border:1.5px solid var(--ink);
+  background:var(--amber);
+  color:var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+  font:600 .68rem/1.2 var(--mono);
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease,color .18s ease;
+}
+.button:hover{
+  background:var(--paper-3);
+  color:var(--ink);
+  box-shadow:2px 2px 0 var(--ink);
+  transform:translate(2px,2px);
+}
+.button svg{width:14px;height:14px;flex:none}
+.button--ghost{background:transparent;box-shadow:none}
+.button--ghost:hover{background:var(--ink);color:var(--paper)}
+.button--light{background:var(--paper);box-shadow:4px 4px 0 var(--amber)}
+.button--dark{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 var(--amber)}
+.button--dark:hover{background:var(--red);color:var(--paper);box-shadow:2px 2px 0 var(--amber)}
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.site-topline{background:var(--ink);color:var(--paper)}
+.topline-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:34px;
+  font:500 .6rem/1.25 var(--mono);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.topline-inner span:last-child{color:var(--amber);text-align:right}
+.site-head{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(241,234,220,.96);
+  border-bottom:1px solid var(--ink);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.site-bar{display:flex;align-items:center;gap:28px;min-height:var(--head)}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  flex:none;
+  color:var(--ink);
+  text-decoration:none;
+}
+.brand:hover{color:var(--ink)}
+.brand-mark{width:35px;height:31px;color:var(--red);flex:none}
+.brand-word{font:400 1.78rem/.9 var(--serif);letter-spacing:-.06em}
+.brand-sub{
+  margin-left:2px;
+  padding-left:10px;
+  border-left:1px solid var(--line-strong);
+  color:var(--ink-2);
+  font:500 .56rem/1.25 var(--mono);
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  max-width:none;
+  white-space:nowrap;
+}
+.nav{display:flex;align-items:center;gap:22px;margin-left:auto}
+.nav a{
+  position:relative;
+  padding:6px 0;
+  color:var(--ink-2);
+  font:600 .66rem/1 var(--mono);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:2px;
+  background:var(--red);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .2s ease;
+}
+.nav a:hover{color:var(--ink)}
+.nav a:hover::after,.nav a[aria-current="location"]::after{transform:scaleX(1)}
+.nav a[aria-current="location"]{color:var(--ink)}
+.head-cta{margin-left:4px;min-height:38px;padding:9px 13px;box-shadow:3px 3px 0 var(--ink)}
+.head-cta:hover{box-shadow:1px 1px 0 var(--ink)}
+.hero{position:relative;overflow:hidden;padding:clamp(48px,6vw,88px) 0 0}
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.14fr) minmax(350px,.86fr);
+  gap:clamp(36px,5vw,76px);
+  align-items:center;
+}
+.hero-copy{position:relative;z-index:2}
+.hero-kicker{display:flex;align-items:center;gap:10px;margin-bottom:24px;color:var(--red-dark)}
+.hero-kicker::before{content:"";width:30px;height:1.5px;background:currentColor;flex:none}
+.hero-title{font-size:clamp(3rem,5.7vw,5.55rem);line-height:.9;letter-spacing:-.055em;margin:0 0 28px}
+.hero-title span{display:block}
+.hero-title em{font-style:italic;color:var(--red)}
+.hero-lede{max-width:45ch;color:var(--ink-2);font-size:clamp(1.05rem,1.45vw,1.28rem);line-height:1.56}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-facts{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  margin-top:38px;
+  padding-top:17px;
+  border-top:1px solid var(--line-strong);
+}
+.hero-facts li{
+  padding:0 13px;
+  border-left:1px solid var(--line);
+  color:var(--ink-2);
+  font-size:.76rem;
+  line-height:1.4;
+}
+.hero-facts li:first-child{padding-left:0;border-left:0}
+.hero-facts b{
+  display:block;
+  margin-bottom:5px;
+  color:var(--ink);
+  font:600 .6rem/1.25 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.hero-console{position:relative;z-index:1;padding:18px 12px 28px 8px}
+.hero-console::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:6%;
+  right:-23%;
+  width:85%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:var(--red);
+  opacity:.94;
+}
+.hero-console::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  right:0;
+  bottom:1%;
+  width:48%;
+  height:48px;
+  border-top:1.5px solid var(--ink);
+  border-bottom:1.5px solid var(--ink);
+  background:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 9px);
+  opacity:.5;
+}
+.console{
+  position:relative;
+  background:var(--paper-3);
+  border:1.5px solid var(--ink);
+  box-shadow:12px 12px 0 var(--ink);
+  transform:rotate(1.2deg);
+}
+.console::after{
+  content:"";
+  position:absolute;
+  top:-11px;
+  left:50%;
+  width:86px;
+  height:21px;
+  background:rgba(227,170,60,.7);
+  border:1px solid rgba(23,20,15,.2);
+  transform:translateX(-50%) rotate(-2deg);
+}
+.console-strip{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:9px 14px;
+  border-bottom:1.5px solid var(--ink);
+  background:var(--amber);
+  color:var(--ink);
+  font:600 .58rem/1.25 var(--mono);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.console-body{position:relative;padding:20px 20px 21px;background:var(--ink);color:var(--paper)}
+.console-status{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--amber);
+  font:600 .6rem/1.2 var(--mono);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.status-light{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--red);
+  box-shadow:0 0 0 4px rgba(189,67,43,.2);
+  animation:blink 1.3s steps(2,end) infinite;
+}
+.console[data-mode="auto"] .status-light{background:var(--amber);box-shadow:0 0 0 4px rgba(227,170,60,.17)}
+.console-now{margin-top:20px}
+.console-overline{
+  color:rgba(241,234,220,.55);
+  font:500 .58rem/1.2 var(--mono);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.console-title{
+  margin:7px 0 6px;
+  color:var(--paper);
+  font:400 clamp(1.9rem,2.8vw,2.85rem)/1 var(--serif);
+  letter-spacing:-.04em;
+}
+.console-meta{color:rgba(241,234,220,.64);font-size:.8rem;line-height:1.45}
+.wave{
+  display:flex;
+  align-items:flex-end;
+  gap:3px;
+  height:58px;
+  margin:20px 0 15px;
+  padding-bottom:1px;
+  border-bottom:1px solid rgba(241,234,220,.18);
+}
+.wave i{
+  flex:1;
+  height:var(--h,50%);
+  background:var(--red);
+  transform-origin:bottom;
+  animation:pulse var(--speed,1.4s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+.console[data-mode="auto"] .wave i{background:var(--amber)}
+@keyframes pulse{
+  0%,100%{transform:scaleY(.34);opacity:.68}
+  50%{transform:scaleY(1);opacity:1}
+}
+@keyframes blink{50%{opacity:.22}}
+.console-next{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+  color:rgba(241,234,220,.58);
+  font:500 .62rem/1.3 var(--mono);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.console-next b{color:var(--amber);font-weight:600;text-align:right}
+.console-switch{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink);background:var(--paper-2)}
+.console-switch button{
+  min-height:40px;
+  padding:10px 7px;
+  border:0;
+  background:transparent;
+  color:var(--ink-2);
+  font:600 .6rem/1.2 var(--mono);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.console-switch button+button{border-left:1.5px solid var(--ink)}
+.console-switch button:hover{background:rgba(23,20,15,.06);color:var(--ink)}
+.console-switch button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.console[data-mode="live"] .console-switch button[data-mode="live"]{background:var(--red);color:var(--paper)}
+.console[data-mode="auto"] .console-switch button[data-mode="auto"]{background:var(--amber);color:var(--ink)}
+.console-note{
+  padding:11px 14px 12px;
+  border-top:1px solid var(--line);
+  background:var(--paper-3);
+  color:var(--ink-2);
+  font-size:.75rem;
+  line-height:1.5;
+}
+.hero-foot{
+  grid-column:1/-1;
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:28px;
+  margin-top:clamp(42px,6vw,74px);
+  padding:13px 0 16px;
+  border-top:1px solid var(--line-strong);
+  font:500 .62rem/1.4 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.hero-foot strong{font:italic 400 1.15rem/1 var(--serif);letter-spacing:-.02em;text-transform:none}
+.hero-foot .scroll-cue{display:inline-flex;align-items:center;gap:9px;color:var(--red-dark)}
+.hero-foot .scroll-cue svg{width:13px;height:13px}
+</style>
+<style id="layout">
+.signal-strip{border-top:1.5px solid var(--ink);border-bottom:1px solid var(--line);background:var(--paper-2);overflow:hidden}
+.signal-list{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.signal-list::-webkit-scrollbar{display:none}
+.signal-list li{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex:0 0 auto;
+  padding:14px 18px 14px 0;
+  color:var(--ink-2);
+  font:600 .59rem/1.2 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.signal-list li+li{padding-left:18px;border-left:1px solid var(--line)}
+.signal-list b{color:var(--red);font-weight:600}
+.signal-list li:not(:last-child)::after{content:"→";margin-left:4px;color:var(--ink);opacity:.38}
+.section{position:relative;padding:clamp(72px,9vw,118px) 0;border-top:1px solid var(--line)}
+.section-head{
+  display:grid;
+  grid-template-columns:minmax(150px,.38fr) minmax(0,1.12fr);
+  gap:clamp(26px,5vw,76px);
+  align-items:start;
+  margin-bottom:clamp(36px,5vw,62px);
+}
+.section-label{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding-top:8px;
+  color:var(--red-dark);
+  font:600 .62rem/1.3 var(--mono);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.section-label span{
+  display:inline-grid;
+  place-items:center;
+  width:24px;
+  height:24px;
+  border:1px solid currentColor;
+  font-size:.56rem;
+}
+.section-head h2{max-width:16ch;font-size:clamp(2.45rem,4.7vw,4.55rem);line-height:.96;letter-spacing:-.048em}
+.section-head .lede{margin-top:20px;max-width:56ch}
+.dark .section-label{color:var(--amber)}
+.dark .section-head h2{color:var(--paper)}
+.dark .section-head .lede{color:rgba(241,234,220,.68)}
+.about-intro{
+  display:grid;
+  grid-template-columns:minmax(0,1.18fr) minmax(270px,.82fr);
+  gap:clamp(38px,6vw,84px);
+  align-items:end;
+}
+.about-copy{columns:2;column-gap:2.2rem}
+.about-copy p{
+  break-inside:avoid;
+  color:var(--ink-2);
+  font-size:1.02rem;
+  line-height:1.72;
+}
+.about-copy p+p{margin-top:1.2em}
+.about-copy p:first-child{color:var(--ink);font-size:1.12rem}
+.about-note{border-top:1.5px solid var(--ink);padding-top:18px}
+.about-note blockquote{
+  max-width:16ch;
+  color:var(--ink);
+  font:italic 400 clamp(1.8rem,3.2vw,2.8rem)/1.06 var(--serif);
+  letter-spacing:-.035em;
+}
+.about-note figcaption{
+  margin-top:18px;
+  color:var(--ink-2);
+  font:500 .61rem/1.4 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(44px,6vw,64px);border-top:1.5px solid var(--ink)}
+.principles article{padding:20px 26px 0 0;border-right:1px solid var(--line)}
+.principles article+article{padding-left:26px}
+.principles article:last-child{padding-right:0;border-right:0}
+.principle-num{color:var(--red-dark);font:600 .61rem/1.2 var(--mono);letter-spacing:.12em}
+.principles h3{max-width:15ch;margin:12px 0 9px;font-size:1.55rem;line-height:1.08}
+.principles p{color:var(--ink-2);font-size:.91rem;line-height:1.62}
+.principles a{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-top:15px;
+  color:var(--red-dark);
+  font:600 .59rem/1.2 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+}
+.principles a::after{content:"→"}
+.principles a:hover{text-decoration:underline}
+.week{background:var(--paper-2)}
+.week-board{
+  background:var(--paper-3);
+  border:1.5px solid var(--ink);
+  box-shadow:9px 9px 0 rgba(23,20,15,.16);
+}
+.board-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:12px 16px;
+  border-bottom:1.5px solid var(--ink);
+  background:var(--paper-3);
+}
+.board-bar h3{font-size:1.4rem;line-height:1;letter-spacing:-.035em}
+.board-bar p{font:500 .59rem/1.35 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);text-align:right}
+.board-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.schedule{width:100%;min-width:890px;border-collapse:collapse;table-layout:fixed}
+.schedule th,.schedule td{
+  padding:0;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  vertical-align:top;
+}
+.schedule thead th{
+  padding:10px 9px;
+  border-right-color:rgba(241,234,220,.17);
+  border-bottom:1.5px solid var(--ink);
+  background:var(--ink);
+  color:var(--paper);
+  font:600 .58rem/1.2 var(--mono);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.schedule thead th:first-child{width:68px;color:var(--amber)}
+.schedule tbody th{
+  position:sticky;
+  left:0;
+  z-index:1;
+  width:68px;
+  padding:11px 8px;
+  border-right:1.5px solid var(--ink);
+  background:var(--paper-2);
+  color:var(--ink-2);
+  font:600 .58rem/1.2 var(--mono);
+  letter-spacing:.04em;
+}
+.schedule thead th:first-child{position:sticky;left:0;z-index:2}
+.schedule td{height:74px;padding:8px}
+.schedule td strong{display:block;font:400 .98rem/1.12 var(--serif);letter-spacing:-.015em}
+.schedule td span{
+  display:block;
+  margin-top:7px;
+  color:var(--ink-2);
+  font:600 .56rem/1.1 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.schedule .slot--live{background:rgba(189,67,43,.09);box-shadow:inset 0 3px 0 var(--red)}
+.schedule .slot--live span{color:var(--red-dark)}
+.schedule .slot--auto{background:rgba(227,170,60,.1);box-shadow:inset 0 3px 0 var(--amber)}
+.schedule .slot--talk{background:rgba(30,110,99,.08);box-shadow:inset 0 3px 0 var(--teal)}
+.schedule .slot--talk span{color:var(--teal)}
+.schedule tr:last-child th,.schedule tr:last-child td{border-bottom:0}
+.schedule th:last-child,.schedule td:last-child{border-right:0}
+.week-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;margin-top:18px}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font:500 .59rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:8px;height:8px;background:var(--amber);border:1px solid rgba(23,20,15,.2)}
+.legend .is-live{background:var(--red)}
+.legend .is-talk{background:var(--teal)}
+.week-credit{color:var(--ink-2);font:500 .58rem/1.4 var(--mono);letter-spacing:.06em}
+.scroll-hint{display:none;margin-bottom:9px;color:var(--red-dark);font:600 .58rem/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.desk{overflow:hidden;background:var(--ink);color:var(--paper);border-top:1.5px solid var(--ink)}
+.desk-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(42px,7vw,100px);align-items:start}
+.desk-copy p{max-width:49ch;color:rgba(241,234,220,.65);font-size:1rem;line-height:1.7}
+.desk-copy p+p{margin-top:1.1em}
+.desk-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:34px;padding-top:18px;border-top:1px solid rgba(241,234,220,.22)}
+.desk-fact strong{
+  display:block;
+  color:var(--amber);
+  font:400 clamp(1.75rem,3vw,2.55rem)/1 var(--serif);
+  letter-spacing:-.045em;
+}
+.desk-fact span{display:block;margin-top:5px;color:rgba(241,234,220,.56);font:500 .56rem/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.handback{position:relative;padding-left:26px;border-left:1px solid rgba(241,234,220,.25)}
+.handback-head{
+  margin-bottom:18px;
+  color:rgba(241,234,220,.5);
+  font:500 .58rem/1.3 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.handback li{position:relative;padding-bottom:25px}
+.handback li:last-child{padding-bottom:0}
+.handback li::before{
+  content:"";
+  position:absolute;
+  top:.36em;
+  left:-30.5px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--red);
+  box-shadow:0 0 0 4px var(--ink);
+}
+.handback time{display:block;margin-bottom:5px;color:var(--amber);font:600 .59rem/1.2 var(--mono);letter-spacing:.1em}
+.handback strong{display:block;font:400 1.33rem/1.16 var(--serif);letter-spacing:-.02em}
+.handback p{max-width:44ch;margin-top:5px;color:rgba(241,234,220,.56);font-size:.86rem;line-height:1.55}
+.desk-note{
+  display:grid;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(26px,5vw,68px);
+  margin-top:clamp(46px,6vw,72px);
+  padding-top:25px;
+  border-top:1px solid rgba(241,234,220,.22);
+}
+.desk-note h3{max-width:15ch;font-size:clamp(1.75rem,2.8vw,2.45rem);line-height:1.05;letter-spacing:-.035em}
+.desk-note p{max-width:57ch;color:rgba(241,234,220,.65);font-size:.93rem;line-height:1.68}
+.desk-note p strong{color:var(--paper);font-weight:500}
+.fallback-layout{display:grid;grid-template-columns:minmax(0,.68fr) minmax(0,1.32fr);gap:clamp(40px,6vw,88px);align-items:start}
+.fallback-aside{padding-top:4px}
+.horizon{display:flex;align-items:flex-start;gap:16px;border-top:1.5px solid var(--ink);padding-top:18px}
+.horizon b{color:var(--red);font:400 clamp(3.8rem,6vw,5.5rem)/.78 var(--serif);letter-spacing:-.07em}
+.horizon span{display:block;margin-top:7px;font:600 .61rem/1.35 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.fallback-aside p{max-width:40ch;margin-top:26px;color:var(--ink-2);font-size:.92rem;line-height:1.65}
+.fallback-aside .small-note{margin-top:14px;color:var(--red-dark);font:500 .6rem/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.ladder{display:flex;flex-direction:column;gap:12px}
+.layer{
+  position:relative;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr) auto;
+  gap:15px;
+  align-items:start;
+  margin-left:calc(var(--step,0) * 22px);
+  padding:17px 17px 17px 15px;
+  border:1.5px solid var(--ink);
+  background:var(--paper-3);
+  box-shadow:5px 5px 0 rgba(23,20,15,.12);
+}
+.layer::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--accent)}
+.layer:nth-child(1){--step:0;--accent:var(--amber);--accent-ink:var(--amber-ink)}
+.layer:nth-child(2){--step:1;--accent:var(--teal);--accent-ink:var(--teal)}
+.layer:nth-child(3){--step:2;--accent:var(--red);--accent-ink:var(--red-dark)}
+.layer:nth-child(4){--step:3;--accent:var(--ink);--accent-ink:var(--ink)}
+.layer-num{padding-top:4px;color:var(--accent-ink);font:600 .64rem/1.2 var(--mono);letter-spacing:.08em}
+.layer h3{margin-bottom:4px;font-size:1.5rem;line-height:1.04}
+.layer p{max-width:52ch;color:var(--ink-2);font-size:.87rem;line-height:1.52}
+.layer .state{
+  align-self:start;
+  padding:4px 6px;
+  border:1px solid currentColor;
+  color:var(--accent-ink);
+  font:600 .56rem/1.2 var(--mono);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.audience-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:clamp(40px,6vw,88px);align-items:start}
+.people{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink)}
+.person{padding:17px 20px 19px 0;border-bottom:1px solid var(--line)}
+.person:nth-child(even){padding-left:20px;border-left:1px solid var(--line)}
+.person .person-tag{color:var(--red-dark);font:600 .56rem/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.person h3{margin:4px 0 5px;font-size:1.4rem;line-height:1.1;letter-spacing:-.025em}
+.person p{color:var(--ink-2);font-size:.85rem;line-height:1.5}
+.fit{background:var(--paper-3);border:1.5px solid var(--ink);box-shadow:7px 7px 0 var(--amber);padding:24px}
+.fit h3{font-size:1.7rem;line-height:1.05;letter-spacing:-.03em}
+.fit-group+.fit-group{margin-top:22px}
+.fit-label{display:flex;align-items:center;gap:8px;margin:15px 0 7px;font:600 .59rem/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.fit-label i{width:8px;height:8px;background:var(--teal);flex:none}
+.fit-label.no i{background:var(--red)}
+.fit ul li{
+  position:relative;
+  padding:8px 0 8px 17px;
+  border-top:1px solid var(--line);
+  color:var(--ink-2);
+  font-size:.86rem;
+  line-height:1.45;
+}
+.fit ul li::before{content:"+";position:absolute;left:0;top:8px;color:var(--teal);font:600 .8rem/1.4 var(--mono)}
+.fit .not-yet li::before{content:"−";color:var(--red)}
+.fit .fit-foot{margin-top:17px;color:var(--ink-2);font:500 .57rem/1.45 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.pilot{position:relative;overflow:hidden;background:var(--red-dark);color:var(--paper);border-top:1.5px solid var(--ink)}
+.pilot::before{
+  content:"";
+  position:absolute;
+  top:-170px;
+  right:-130px;
+  width:460px;
+  height:460px;
+  border:1px solid rgba(241,234,220,.25);
+  border-radius:50%;
+  box-shadow:0 0 0 42px rgba(241,234,220,.04),0 0 0 84px rgba(241,234,220,.035);
+}
+.pilot .section-label{color:var(--paper)}
+.pilot .section-head h2 em{color:var(--amber);font-style:italic}
+.pilot .section-head .lede{color:rgba(241,234,220,.8)}
+.pilot-cards{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pilot-card{
+  background:var(--paper);
+  border:1.5px solid var(--ink);
+  box-shadow:7px 7px 0 var(--ink);
+  color:var(--ink);
+  padding:24px;
+}
+.pilot-card h3{font-size:1.75rem;line-height:1.03;letter-spacing:-.035em}
+.pilot-card ul{margin-top:16px}
+.pilot-card li{
+  display:grid;
+  grid-template-columns:20px 1fr;
+  gap:8px;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+  color:var(--ink-2);
+  font-size:.87rem;
+  line-height:1.45;
+}
+.pilot-card li .num{color:var(--red-dark);font:600 .57rem/1.45 var(--mono)}
+.pilot-foot{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  flex-wrap:wrap;
+  margin-top:34px;
+  padding-top:23px;
+  border-top:1px solid rgba(241,234,220,.35);
+}
+.pilot-foot p{max-width:56ch;color:rgba(241,234,220,.8);font-size:.94rem;line-height:1.6}
+.pilot-foot p strong{color:var(--paper);font-weight:500}
+.pilot-foot .pilot-small{margin-top:8px;color:rgba(241,234,220,.85);font:500 .58rem/1.5 var(--mono);letter-spacing:.04em}
+.pilot-foot .button{flex:none}
+.faq-grid{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:clamp(42px,7vw,100px);align-items:start}
+.faq-side h2{margin:14px 0 20px;font-size:clamp(2.45rem,4.4vw,4.15rem);line-height:.98;letter-spacing:-.045em}
+.faq-side .lede{font-size:.98rem}
+.faq-side .contact-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:22px;
+  color:var(--red-dark);
+  font:600 .61rem/1.3 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-decoration:none;
+}
+.faq-side .contact-link::after{content:"→"}
+.faq-side .contact-link:hover{text-decoration:underline}
+.faq-list{border-top:1.5px solid var(--ink)}
+.faq-list details{border-bottom:1px solid var(--line-strong)}
+.faq-list summary{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:22px;
+  padding:18px 0;
+  list-style:none;
+  cursor:pointer;
+  font:400 clamp(1.16rem,1.7vw,1.42rem)/1.22 var(--serif);
+  letter-spacing:-.02em;
+}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{
+  content:"+";
+  flex:none;
+  margin-top:2px;
+  color:var(--red);
+  font:500 1rem/1 var(--mono);
+  transition:transform .2s ease;
+}
+.faq-list details[open] summary{color:var(--red-dark)}
+.faq-list details[open] summary::after{content:"−"}
+.faq-list .answer{
+  max-width:70ch;
+  padding:0 44px 20px 0;
+  color:var(--ink-2);
+  font-size:.93rem;
+  line-height:1.65;
+}
+.faq-list .answer p+p{margin-top:.8em}
+.faq-list .answer a{color:var(--red-dark);font-weight:600}
+.contact{background:var(--paper-2);border-top:1px solid var(--line);padding:clamp(58px,7vw,92px) 0}
+.contact-inner{
+  display:grid;
+  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  gap:clamp(38px,6vw,90px);
+  align-items:end;
+}
+.contact-label{margin-bottom:17px;color:var(--red-dark);font:600 .62rem/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.contact h2{max-width:13ch;font-size:clamp(2.4rem,4.5vw,4.3rem);line-height:.98;letter-spacing:-.048em}
+.contact-copy p{max-width:47ch;color:var(--ink-2);font-size:.98rem;line-height:1.65}
+.contact-email{
+  display:inline-block;
+  margin-top:18px;
+  padding-bottom:5px;
+  border-bottom:2px solid var(--red);
+  color:var(--ink);
+  font:400 clamp(1.35rem,3vw,2.55rem)/1.08 var(--serif);
+  letter-spacing:-.035em;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+.contact-email:hover{color:var(--red-dark);border-color:var(--ink)}
+.footer{overflow:hidden;background:var(--ink);color:var(--paper);padding:clamp(38px,5vw,58px) 0 18px}
+.footer-top{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;
+  gap:clamp(26px,5vw,60px);
+  align-items:start;
+  padding-bottom:24px;
+  border-bottom:1px solid rgba(241,234,220,.2);
+}
+.footer .brand{color:var(--paper)}
+.footer .brand:hover{color:var(--paper)}
+.footer .brand-mark{color:var(--amber)}
+.footer .brand-sub{color:rgba(241,234,220,.55);border-left-color:rgba(241,234,220,.28)}
+.footer-top p{max-width:42ch;color:rgba(241,234,220,.62);font-size:.86rem;line-height:1.6}
+.footer-top p strong{color:var(--paper);font-weight:500}
+.footer-nav{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:flex-end}
+.footer-nav a{color:rgba(241,234,220,.68);font:500 .59rem/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase;text-decoration:none}
+.footer-nav a:hover{color:var(--amber)}
+.footer-word{
+  margin-top:clamp(20px,3vw,38px);
+  color:var(--paper);
+  font:400 clamp(8rem,24vw,22rem)/.67 var(--serif);
+  letter-spacing:-.09em;
+  user-select:none;
+}
+.footer-word span{color:var(--red)}
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  padding-top:16px;
+  border-top:1px solid rgba(241,234,220,.2);
+  color:rgba(241,234,220,.55);
+  font:500 .58rem/1.4 var(--mono);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.footer-bottom a{color:rgba(241,234,220,.65);text-decoration:none}
+.footer-bottom a:hover{color:var(--amber)}
+</style>
+<style id="detail">
+@media (max-width:1100px){
+  .nav{gap:16px}
+  .brand-sub{display:none}
+  .hero-grid{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:44px}
+  .hero-title{font-size:clamp(3rem,6.1vw,5rem)}
+  .section-head{grid-template-columns:130px minmax(0,1fr);gap:40px}
+}
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-copy{max-width:700px}
+  .hero-title{max-width:12ch;font-size:clamp(3.4rem,8vw,5.9rem)}
+  .hero-lede{max-width:52ch}
+  .hero-console{width:min(570px,100%);margin-inline:auto;padding:18px 14px 30px}
+  .hero-foot{margin-top:44px}
+  .about-intro{grid-template-columns:1fr;gap:36px}
+  .about-copy{columns:1;max-width:68ch}
+  .about-note{max-width:390px}
+  .principles{grid-template-columns:1fr}
+  .principles article{padding:18px 0;border-right:0;border-bottom:1px solid var(--line)}
+  .principles article+article{padding-left:0}
+  .principles article:last-child{padding-bottom:0;border-bottom:0}
+  .desk-grid{grid-template-columns:1fr;gap:48px}
+  .desk-copy{max-width:650px}
+  .fallback-layout{grid-template-columns:1fr;gap:42px}
+  .fallback-aside{max-width:540px}
+  .fallback-aside p{max-width:56ch}
+  .audience-grid{grid-template-columns:1fr;gap:42px}
+  .fit{max-width:560px}
+  .faq-grid{grid-template-columns:1fr;gap:42px}
+  .faq-side{max-width:570px}
+  .contact-inner{grid-template-columns:1fr;gap:26px}
+  .contact h2{max-width:15ch}
+  .footer-top{grid-template-columns:1fr 1fr;gap:28px}
+  .footer-nav{justify-content:flex-start}
+}
 @media (max-width:860px){
-  .tablist{grid-template-columns:1fr 1fr}
-  .tab{padding:14px 12px;font-size:.95rem}
-  .tab[aria-selected="true"]::after{height:3px}
-  .panel{grid-template-columns:1fr}
-  .art{order:-1;aspect-ratio:16/10}
+  :root{--head:94px}
+  .site-bar{flex-wrap:wrap;gap:0;min-height:0;padding:10px 0 0}
+  .brand-word{font-size:1.62rem}
+  .brand-mark{width:32px;height:28px}
+  .head-cta{margin-left:auto;min-height:34px;padding:8px 10px;font-size:.58rem;box-shadow:2px 2px 0 var(--ink)}
+  .head-cta:hover{box-shadow:0 0 0 var(--ink);transform:translate(2px,2px)}
+  .nav{
+    order:3;
+    width:100%;
+    margin:0;
+    padding:8px 0 10px;
+    gap:22px;
+    overflow-x:auto;
+    border-top:1px solid var(--line);
+    scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex:none;padding:6px 0}
+  .section-head{grid-template-columns:1fr;gap:18px}
+  .section-label{padding-top:0}
+  .section-head h2{max-width:18ch}
+  .section-head .lede{max-width:62ch}
+  .scroll-hint{display:block}
 }
-
-/* ================= FEATURES ================= */
-.features .head{max-width:640px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px 30px;overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease}
-.card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 0 0,var(--glow,#FFE5E6) 0,transparent 60%);opacity:0;transition:opacity .35s ease}
-.card:hover{transform:translateY(-8px);box-shadow:0 30px 50px -28px rgba(27,16,51,.5);border-color:transparent}
-.card:hover::before{opacity:1}
-.card>*{position:relative}
-.card .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:20px;transition:transform .3s ease}
-.card:hover .ic{transform:rotate(-8deg) scale(1.08)}
-.card .ic svg{width:30px;height:30px}
-.card h3{font-size:1.3rem;margin-bottom:8px}
-.card p{color:var(--muted);font-size:1rem;line-height:1.6}
-@media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:620px){.cards{grid-template-columns:1fr}}
-
-/* ================= NEWS ================= */
-.news.dark{background:linear-gradient(180deg,var(--plum) 0,#2B1A57 100%);color:#fff}
-.news h2{max-width:20ch}
-.news .lead{color:rgba(255,255,255,.75)}
-.filters{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 34px}
-.filters button{font:600 .92rem/1 var(--body);padding:11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;cursor:pointer;transition:all .2s ease}
-.filters button:hover{border-color:#fff;transform:translateY(-2px)}
-.filters button[aria-pressed="true"]{background:var(--marigold);border-color:var(--marigold);color:var(--plum)}
-.timeline{list-style:none;margin:0;padding:0 0 0 28px;position:relative;display:grid;gap:22px}
-.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--marigold),rgba(255,255,255,.12))}
-.post{position:relative;display:grid;grid-template-columns:150px 1fr;gap:8px 28px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:24px 26px;transition:transform .3s ease,background .3s ease,border-color .3s ease}
-.post::before{content:"";position:absolute;left:-28px;top:32px;width:16px;height:16px;border-radius:50%;background:var(--plum);border:3px solid var(--marigold)}
-.post[data-kind="soon"]::before{border-color:var(--lagoon)}
-.post:hover{transform:translateX(8px);background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35)}
-.post[hidden]{display:none}
-.meta{font:600 .76rem/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.meta .kind{display:inline-block;margin-bottom:8px;padding:5px 9px;border-radius:6px;background:rgba(255,176,32,.18);color:var(--marigold)}
-.post[data-kind="soon"] .kind{background:rgba(25,194,174,.18);color:#7BF0E0}
-.post h3{font-size:1.4rem;margin-bottom:8px}
-.post p{color:rgba(255,255,255,.78);font-size:1rem}
-.fine{margin-top:26px;color:rgba(255,255,255,.55);font-size:.9rem}
-@media (max-width:700px){.post{grid-template-columns:1fr}}
-
-/* ================= FAQ ================= */
-.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(28px,6vw,80px);align-items:start}
-.faq-list{display:grid;gap:12px}
-.q{background:var(--card);border:1px solid var(--line);border-radius:18px;transition:border-color .25s,box-shadow .25s}
-.q:hover{border-color:#CDBEF0}
-.q.open{border-color:var(--coral);box-shadow:0 18px 36px -26px rgba(196,43,74,.6)}
-.q h3{font-size:inherit;letter-spacing:0;font-family:var(--body)}
-.q button{all:unset;box-sizing:border-box;width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;font:700 1.08rem/1.35 var(--body);border-radius:18px}
-.q button:focus-visible{outline:3px solid var(--marigold);outline-offset:2px}
-.q .plus{flex:none;width:32px;height:32px;border-radius:50%;background:#F1EAFF;display:grid;place-items:center;transition:transform .35s ease,background .25s}
-.q .plus svg{width:16px;height:16px}
-.q.open .plus{transform:rotate(135deg);background:var(--coral);color:#fff}
-.a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease}
-.q.open .a{grid-template-rows:1fr}
-.a>div{overflow:hidden}
-.a p{padding:0 22px 22px;color:var(--muted)}
-.q:not(.open) .a p{visibility:hidden}
-.faq-side p{margin-top:14px}
-@media (max-width:860px){.faq-grid{grid-template-columns:1fr}}
-
-/* ================= FOOTER ================= */
-footer.dark{background:var(--plum);color:#fff;padding:72px 0 36px;position:relative;overflow:hidden}
-footer .big{font:800 clamp(4rem,16vw,11rem)/.9 var(--display);letter-spacing:-.06em;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:42px;user-select:none}
-.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:36px}
-footer h3{font:600 .78rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--marigold);margin-bottom:16px}
-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-footer a{text-decoration:none;color:rgba(255,255,255,.8);transition:color .2s}
-footer a:hover{color:var(--marigold)}
-footer p{color:rgba(255,255,255,.72);max-width:38ch}
-footer .tagline{font:800 1.6rem/1.15 var(--display);letter-spacing:-.02em;color:#fff;margin-bottom:12px}
-.bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);font-size:.9rem}
-.totop{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600}
-.totop svg{width:16px;height:16px;transition:transform .2s}.totop:hover svg{transform:translateY(-4px)}
-@media (max-width:820px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>:first-child{grid-column:1/-1}}
-@media (max-width:520px){.fgrid{grid-template-columns:1fr}}
-
-/* no-JS fallbacks */
-.nojs-tabs{display:none}
-html:not(.js) .tablist{display:none}
-html:not(.js) .panel[hidden]{display:grid}
-html:not(.js) .panel+.panel{border-top:1px solid var(--line)}
-html:not(.js) .a{grid-template-rows:1fr}
-html:not(.js) .q:not(.open) .a p{visibility:visible}
-html:not(.js) .plus{display:none}
-html:not(.js) .filters{display:none}
-html:not(.js) .next-step.js-only{display:none}
-
+@media (max-width:760px){
+  .topline-inner{min-height:32px;font-size:.54rem;letter-spacing:.09em}
+  .topline-inner span:first-child{max-width:58%}
+  .hero{padding-top:40px}
+  .hero-kicker{margin-bottom:19px}
+  .hero-title{font-size:clamp(3.05rem,12vw,4.6rem);line-height:.92;margin-bottom:23px}
+  .hero-actions{align-items:stretch}
+  .hero-actions .button{flex:1 1 180px}
+  .hero-facts{grid-template-columns:1fr;gap:11px;margin-top:30px;padding-top:14px}
+  .hero-facts li{padding:9px 0 0;border-left:0;border-top:1px solid var(--line)}
+  .hero-facts li:first-child{padding-top:0;border-top:0}
+  .hero-facts b{display:inline;margin:0 6px 0 0}
+  .hero-console{padding:12px 8px 24px}
+  .console{transform:none;box-shadow:7px 7px 0 var(--ink)}
+  .hero-console::before{right:-30%;width:96%;top:12%}
+  .hero-foot{display:block;margin-top:38px}
+  .hero-foot p+p{margin-top:8px}
+  .section{padding:64px 0}
+  .section-head{margin-bottom:34px}
+  .section-head h2{font-size:clamp(2.35rem,10.4vw,3.5rem)}
+  .week-foot{display:block}
+  .week-credit{margin-top:10px}
+  .board-bar{align-items:flex-start;flex-direction:column;gap:5px}
+  .board-bar p{text-align:left}
+  .desk-facts{grid-template-columns:1fr;gap:14px}
+  .desk-fact{display:grid;grid-template-columns:92px 1fr;align-items:baseline;gap:12px;padding-top:10px;border-top:1px solid rgba(241,234,220,.14)}
+  .desk-fact strong{font-size:2rem}
+  .desk-fact span{margin:0}
+  .desk-note{grid-template-columns:1fr;gap:15px}
+  .layer{margin-left:0;grid-template-columns:32px minmax(0,1fr);gap:10px}
+  .layer .state{grid-column:2;justify-self:start;margin-top:7px}
+  .people{grid-template-columns:1fr}
+  .person:nth-child(even){padding-left:0;border-left:0}
+  .pilot-cards{grid-template-columns:1fr}
+  .pilot-foot{display:block}
+  .pilot-foot .button{margin-top:20px;width:100%}
+  .footer-top{grid-template-columns:1fr;gap:22px}
+  .footer-word{font-size:clamp(7rem,31vw,15rem)}
+  .footer-bottom{align-items:flex-start}
+}
+@media (max-width:560px){
+  .nav{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0 14px;
+    overflow:visible;
+    padding-bottom:7px;
+  }
+  .nav a{justify-self:start;width:max-content;max-width:100%;padding:7px 0 0;font-size:.58rem}
+}
+@media (max-width:520px){
+  .wrap{width:calc(100% - 32px)}
+  .brand-sub{display:none}
+  .console-body{padding:17px 16px 18px}
+  .console-title{font-size:1.85rem}
+  .console-next{font-size:.56rem}
+  .contact-email{font-size:1.35rem}
+  .pilot-card{padding:20px}
+  .fit{padding:20px}
+  .pilot .section-head h2{font-size:clamp(2.3rem,11vw,3.2rem)}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
-  .squig path{stroke-dashoffset:0}
-  .hero-in{opacity:1;transform:none}
-  .js .reveal{opacity:1;transform:none}
+  .status-light,.wave i{animation:none}
+  .wave i{transform:scaleY(.72)}
+  .button,.faq-list summary::after,.nav a::after{transition:none}
 }
 </style>
 </head>
-<body id="top">
-<a class="skip" href="#main">Skip to the content</a>
-
-<!-- ============ HEADER: the tuning dial ============ -->
-<header class="console">
-  <div class="wrap">
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site-topline">
+  <div class="wrap topline-inner">
+    <span>Internet radio for stations with something to say</span>
+    <span>Pilot / five places / 2026</span>
+  </div>
+</div>
+<header class="site-head">
+  <div class="wrap site-bar">
     <a class="brand" href="#top" aria-label="Sauti, back to the top">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#FFB020"/><path d="M14 36v-8M22 42V22M30 46V18M38 42V22M46 38V26M54 34v-4" stroke="#1B1033" stroke-width="4.5" stroke-linecap="round" fill="none"/></svg>
-      Sauti
+      <svg class="brand-mark" viewBox="0 0 40 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
+        <path d="M2 16h4M10 9v14M17 3v26M24 11v10M31 7v18M38 14v4"/>
+      </svg>
+      <span class="brand-word">Sauti</span>
+      <span class="brand-sub">Internet radio<br>for real stations</span>
     </a>
-    <nav class="dial" aria-label="Page sections">
-      <ul>
-        <li><a href="#top" data-stop="top">Home</a></li>
-        <li><a href="#about" data-stop="about">About</a></li>
-        <li><a href="#how" data-stop="how">How it works</a></li>
-        <li><a href="#news" data-stop="news">News</a></li>
-        <li><a href="#faq" data-stop="faq">Questions</a></li>
-      </ul>
-      <div class="scale" aria-hidden="true"><span class="needle"></span></div>
+    <nav class="nav" aria-label="Page sections">
+      <a href="#station">The station</a>
+      <a href="#week">The week</a>
+      <a href="#desk">The desk</a>
+      <a href="#fallbacks">Fallbacks</a>
+      <a href="#pilot">Pilot</a>
+      <a href="#faq">Questions</a>
     </nav>
-    <p class="readout" aria-hidden="true">Tuned to<b id="tuned">Home</b></p>
+    <a class="button head-cta" href="mailto:n42611750@gmail.com?subject=Sauti%20pilot">Join the pilot</a>
   </div>
 </header>
 
 <main id="main">
-
-<!-- ============ HERO ============ -->
-<section class="hero dark" id="hero" aria-labelledby="hero-title">
-  <svg class="rings" viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="190"/></svg>
-  <div class="wrap">
-    <div>
-      <p class="eyebrow hero-in">Internet radio for everyone</p>
-      <h1 id="hero-title" class="hero-in" style="margin-top:18px">
-        <span>Your voice,</span>
-        <span>
-          <span class="air">on air
-            <svg class="squig" viewBox="0 0 220 18" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11 Q 15 1 28 9 T 53 9 T 78 9 T 103 9 T 128 9 T 153 9 T 178 9 T 217 9"/></svg>
-          </span>
-          all day.
-        </span>
-      </h1>
-      <p class="lead hero-in">Start your own internet radio station without the technical headaches. Add your music, plan your week, and go live whenever you like. Sauti keeps the sound flowing in between.</p>
-      <div class="cta-row hero-in">
-        <a class="btn btn--primary" href="#how">See how it works <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
-        <a class="btn btn--ghost" href="#news">Read the latest news</a>
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker kicker">A control room for stations run by people, not racks</p>
+        <h1 class="hero-title" id="hero-title">
+          <span>Keep the station</span>
+          <span>on. <em>Take the mic</em></span>
+          <span>when it matters.</span>
+        </h1>
+        <p class="hero-lede">Sauti runs the music, the weekly schedule, and the hand-back after a live show. You keep your voice, your people, and your reason for broadcasting.</p>
+        <div class="hero-actions">
+          <a class="button" href="mailto:n42611750@gmail.com?subject=Sauti%20pilot%20enquiry">
+            Bring your station
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
+          </a>
+          <a class="button button--ghost" href="#week">
+            See a week on air
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5"/></svg>
+          </a>
+        </div>
+        <ul class="hero-facts">
+          <li><b>Live hand-back</b>in seconds, not at the end of the hour</li>
+          <li><b>Listeners</b>no app and no account</li>
+          <li><b>Playout</b>minutes of your choice planned ahead</li>
+        </ul>
       </div>
-      <ul class="assure hero-in">
-        <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>No technical skills needed</li>
-        <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Listeners tune in from any browser</li>
-        <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Always on air</li>
-      </ul>
+      <div class="hero-console">
+        <div class="console" id="demo" data-mode="live">
+          <div class="console-strip">
+            <span>Sample / ZeroRadio</span>
+            <span>15:02 EAT</span>
+          </div>
+          <div class="console-body" aria-live="polite">
+            <div class="console-status">
+              <span class="status-light" aria-hidden="true"></span>
+              <span id="demo-status">Live / desk open</span>
+            </div>
+            <div class="console-now">
+              <p class="console-overline">Now on air</p>
+              <h2 class="console-title" id="demo-title">The Long Way Home</h2>
+              <p class="console-meta" id="demo-meta">Amina W. at the desk · live from Nairobi</p>
+              <div class="wave" id="demo-wave" aria-hidden="true"></div>
+              <div class="console-next">
+                <span>Next / 19:00</span>
+                <b>Night Shift</b>
+              </div>
+            </div>
+          </div>
+          <div class="console-switch" role="group" aria-label="Preview the station state">
+            <button type="button" data-mode="live" aria-pressed="true">Live desk</button>
+            <button type="button" data-mode="auto" aria-pressed="false">Automation</button>
+          </div>
+          <p class="console-note" id="demo-note">When Amina closes the desk, the schedule takes over by itself. No one has to press play.</p>
+        </div>
+      </div>
+      <div class="hero-foot">
+        <p><strong>Sauti</strong> &nbsp;made for voices that matter.</p>
+        <p class="scroll-cue">Scroll<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5"/></svg></p>
+      </div>
     </div>
+  </section>
 
-    <!-- interactive illustration -->
-    <div class="station hero-in" id="station" data-mode="auto" style="animation-delay:.5s">
-      <header>
-        <h2>Sunrise FM</h2>
-        <span class="tag">Example station</span>
+  <section class="signal-strip" aria-label="How a station moves through Sauti">
+    <div class="wrap">
+      <ol class="signal-list">
+        <li><b>01</b>Library</li>
+        <li><b>02</b>Week</li>
+        <li><b>03</b>Playout</li>
+        <li><b>04</b>Live desk</li>
+        <li><b>05</b>Hand-back</li>
+        <li><b>06</b>Play log</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="station" aria-labelledby="station-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>01</span>The station</p></div>
+        <div>
+          <h2 id="station-title">A station is a promise that someone will be there.</h2>
+          <p class="lede">Not a folder of audio files. A station has a shape: the breakfast show, the request hour, the voice that says goodnight. Sauti is built around that shape and the people who make it happen.</p>
+        </div>
       </header>
-      <span class="pill" id="pill"><i></i><span id="pill-text">On air · Automation</span></span>
-      <div class="eq" id="eq" aria-hidden="true"></div>
-      <p class="now" id="now" aria-live="polite">Playing: Morning Light</p>
-      <div class="bar" aria-hidden="true"><b></b></div>
-      <p class="next" id="next">Your playlist is running on auto. Next up at 18:00: Evening Drive.</p>
-      <div class="switch" role="group" aria-label="Choose who is on the air">
-        <!-- <p>Try it: who is on the air?</p> -->
-        <div class="seg">
-          <button type="button" data-mode="auto" aria-pressed="true">Auto-pilot</button>
-          <button type="button" data-mode="live" aria-pressed="false">Live presenter</button>
+      <div class="about-intro">
+        <div class="about-copy">
+          <p>Sauti runs the ordinary hours without asking for attention. It knows when to get out of the way. That is most of the work of running a station. The rest belongs to you.</p>
+          <p>Your library, your playlists, your presenters and your weekly grid live in one place. No encoder settings to remember before breakfast. No spreadsheet holding the schedule together. No engineer on call for the quiet hours.</p>
+          <p>The result is a control room small enough to learn in an afternoon, and reliable enough to leave on air when no one is in the building. Sauti is a station that runs itself, until you take the mic.</p>
+        </div>
+        <figure class="about-note">
+          <blockquote>“The schedule is a promise. The fallback is how you keep it.”</blockquote>
+          <figcaption>A note taped above the desk</figcaption>
+        </figure>
+      </div>
+      <div class="principles">
+        <article>
+          <span class="principle-num">01 / Schedule</span>
+          <h3>The week is the source.</h3>
+          <p>Playlists are ingredients. The weekly schedule is the programme. Sauti reads the next slot from the same grid every week, in the station’s own time zone.</p>
+          <a href="#week">See the board</a>
+        </article>
+        <article>
+          <span class="principle-num">02 / Live</span>
+          <h3>Live is a handover.</h3>
+          <p>A presenter connects with a standard encoder. Sauti preempts automation in about two seconds, then gives the hour back when they disconnect.</p>
+          <a href="#desk">Meet the desk</a>
+        </article>
+        <article>
+          <span class="principle-num">03 / Safety</span>
+          <h3>Silence is a bug.</h3>
+          <p>A failed file should not become dead air. Sauti falls through four layers of programming before listeners hear nothing.</p>
+          <a href="#fallbacks">See the ladder</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section week" id="week" aria-labelledby="week-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>02</span>The week</p></div>
+        <div>
+          <h2 id="week-title">Seven days, one board.</h2>
+          <p class="lede">A station is not a playlist. It is a shape across seven days: breakfast, the school run, the Friday request hour, the Sunday call-in. Sauti keeps that shape in one board, then runs it in the station’s time zone.</p>
+        </div>
+      </header>
+      <p class="scroll-hint">Swipe the board to see the rest of the week →</p>
+      <div class="week-board">
+        <div class="board-bar">
+          <h3>ZeroRadio</h3>
+          <p>Sample schedule / all times EAT</p>
+        </div>
+        <div class="board-scroll" tabindex="0" role="region" aria-label="Sample weekly schedule. Scroll horizontally to see every day.">
+          <table class="schedule">
+            <caption class="sr-only">Sample weekly schedule for ZeroRadio, all times East Africa Time.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Mon</th>
+                <th scope="col">Tue</th>
+                <th scope="col">Wed</th>
+                <th scope="col">Thu</th>
+                <th scope="col">Fri</th>
+                <th scope="col">Sat</th>
+                <th scope="col">Sun</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">06:00</th>
+                <td class="slot--auto"><strong>The Early Turn</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>The Early Turn</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>The Early Turn</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>The Early Turn</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>The Early Turn</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Slow Saturday</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Sunday Mornings</strong><span>Automation</span></td>
+              </tr>
+              <tr>
+                <th scope="row">09:00</th>
+                <td class="slot--live"><strong>Morning Desk</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Kazi &amp; Coffee</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Morning Desk</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Kazi &amp; Coffee</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Morning Desk</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Market Square</strong><span>Live desk</span></td>
+                <td class="slot--talk"><strong>Sunday Gathering</strong><span>Talk</span></td>
+              </tr>
+              <tr>
+                <th scope="row">12:00</th>
+                <td class="slot--auto"><strong>Midday Mix</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Midday Mix</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Midday Mix</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Midday Mix</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Midday Mix</strong><span>Automation</span></td>
+                <td class="slot--live"><strong>Lunch Requests</strong><span>Live desk</span></td>
+                <td class="slot--talk"><strong>Sunday Table</strong><span>Talk</span></td>
+              </tr>
+              <tr>
+                <th scope="row">15:00</th>
+                <td class="slot--live"><strong>The Long Way Home</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>The Long Way Home</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>The Long Way Home</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>The Long Way Home</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>The Long Way Home</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Saturday Sports</strong><span>Live desk</span></td>
+                <td class="slot--auto"><strong>The Long Listen</strong><span>Automation</span></td>
+              </tr>
+              <tr>
+                <th scope="row">19:00</th>
+                <td class="slot--auto"><strong>Night Shift</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Night Shift</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Night Shift</strong><span>Automation</span></td>
+                <td class="slot--auto"><strong>Night Shift</strong><span>Automation</span></td>
+                <td class="slot--live"><strong>Friday Frequency</strong><span>Live desk</span></td>
+                <td class="slot--live"><strong>Club Night</strong><span>Live desk</span></td>
+                <td class="slot--talk"><strong>Sunday Service</strong><span>Talk</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <small>An illustration of how Sauti switches between your music and your voice.</small>
-    </div>
-  </div>
-  <svg class="tail" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 60C160 100 320 100 480 70S800 0 1000 20s320 70 440 40V100H0Z"/></svg>
-</section>
-
-<!-- ============ ABOUT ============ -->
-<section class="about sec" id="about" aria-labelledby="about-title">
-  <span class="blob b1" aria-hidden="true"></span><span class="blob b2" aria-hidden="true"></span>
-  <div class="wrap">
-    <div class="about-grid">
-      <div class="reveal">
-        <p class="eyebrow">About us</p>
-        <h2 id="about-title">Radio, made simple.</h2>
-        <p class="lead">Running a radio station no longer requires a complex studio setup, expensive hardware, a team of technical specialists and a staff. Sauti brings the essential tools into a single, intuitive web platform so your station operates reliably, efficiently, and with zero friction.</p>
-        <p class="lead">You bring the music and the voice. We keep the station running, day and night.</p>
-        <p class="say"><b>Sauti</b> is a platform built to give more people a space to be heard, connect, inspire, and lead conversations that matter.</p>
-      </div>
-      <div class="promises">
-        <article class="promise reveal" data-d="1">
-          <span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 5.3 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.3l1.2-5.6L4 8.9l5.6-.6z"/></svg></span>
-          <div><h3>Simple first</h3><p>If you can upload a WhatsApp photo, you can run a radio station. Sauti is designed to be easy to use, even for beginners.</p></div>
-        </article>
-        <article class="promise reveal" data-d="2">
-          <span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div><h3>Always on air</h3><p>Your station never sleeps. Sauti automatically fills the gaps between your shows with music and jingles, while keeping your listeners tuned in.</p></div>
-        </article>
-        <article class="promise reveal" data-d="3">
-          <span class="ic c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></span>
-          <div><h3>Yours, always</h3><p>Your music, your schedule, your voice, your shows, your presenters. Sauti is a platform for you to run your station, You decide exactly what goes out to your listeners</p></div>
-        </article>
+      <div class="week-foot">
+        <div class="legend" aria-label="Schedule key">
+          <span><i></i>Automation</span>
+          <span><i class="is-live"></i>Live desk</span>
+          <span><i class="is-talk"></i>Talk</span>
+        </div>
+        <p class="week-credit">ZeroRadio is a sample schedule for demonstration. Your board will be built from your own playlists, shows, presenters and time zone.</p>
       </div>
     </div>
+  </section>
 
-    <div class="for reveal">
-      <h3>Who is Sauti for?</h3>
-      <ul class="chips">
-        <li>Community groups</li><li>Universities and colleges</li><li>Faith communities</li><li>Local businesses</li>
-        <li>Storytellers and talk show hosts</li><li>Civic organizations and NGOs</li><li>DJs and music lovers</li>
-        <li>Anyone with something to say</li>
-      </ul>
+  <section class="section desk dark" id="desk" aria-labelledby="desk-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>03</span>The desk</p></div>
+        <div>
+          <h2 id="desk-title">When the mic opens, everything else gets out of the way.</h2>
+          <p class="lede">Going live feels like stepping into a show, you never wrestle the software. Presenters use their own credentials with BUTT or any standard Icecast source client. Sauti takes over in about two seconds.</p>
+        </div>
+      </header>
+      <div class="desk-grid">
+        <div class="desk-copy">
+          <p>When the encoder closes, the station does not wait for someone to notice. The schedule resumes by itself, and the play log records the handover.</p>
+          <p>Live is a handover, not a takeover. The presenter’s credentials are issued for the duration of their show. When the desk closes, the key is revoked. No one else can use it.</p>
+          <ul class="desk-facts">
+            <li class="desk-fact"><strong>~2 sec</strong><span>from authenticated audio to live</span></li>
+            <li class="desk-fact"><strong>1 key</strong><span>per presenter, revocable</span></li>
+            <li class="desk-fact"><strong>Standard</strong><span>Icecast source client</span></li>
+          </ul>
+        </div>
+        <div class="handback-wrap">
+          <p class="handback-head">One handover / 15:00–15:47 EAT</p>
+          <ol class="handback">
+            <li>
+              <time datetime="15:00">15:00</time>
+              <strong>The schedule is on air</strong>
+              <p>The Long Way Home plays from the weekly grid. Automation is holding the station.</p>
+            </li>
+            <li>
+              <time datetime="15:02">15:02</time>
+              <strong>Amina opens the encoder</strong>
+              <p>Live preempts automation. No one in the studio has to change a setting.</p>
+            </li>
+            <li>
+              <time datetime="15:47">15:47</time>
+              <strong>Amina closes the encoder</strong>
+              <p>Sauti sees the disconnect and hands the station back to the schedule.</p>
+            </li>
+            <li>
+              <time datetime="15:47">15:47</time>
+              <strong>The log keeps the record</strong>
+              <p>Live start, live end, and every track around it are written to the play log.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <div class="desk-note">
+        <h3>A connection card, not the keys to the building.</h3>
+        <p>Credentials are issued per presenter. <strong>The live page gives each person exactly what to enter</strong> and nothing else. Give a key to the Friday host. Take it back when their show ends.</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ HOW IT WORKS ============ -->
-<section class="how sec" id="how" aria-labelledby="how-title">
-  <div class="wrap">
-    <div class="how-head reveal">
+  <section class="section fallbacks" id="fallbacks" aria-labelledby="fallbacks-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>04</span>Fallbacks</p></div>
+        <div>
+          <h2 id="fallbacks-title">Silence is not a fallback.</h2>
+          <p class="lede">Sauti keeps the next minutes (of your choice) playout planned. If a file, a schedule or a connection lets you down, the station climbs down a ladder until it finds something it can trust.</p>
+        </div>
+      </header>
+      <div class="fallback-layout">
+        <aside class="fallback-aside">
+          <div class="horizon">
+            <b>20</b>
+            <span>minutes of planned playout ahead</span>
+          </div>
+          <p>Enough room for a restart, a slow disk or a control-room hiccup to happen off air. When the horizon is running out, the safety layers take over.</p>
+          <p class="small-note">Four layers / one visible state</p>
+        </aside>
+        <div class="ladder">
+          <article class="layer">
+            <span class="layer-num">01</span>
+            <div>
+              <h3>The plan</h3>
+              <p>The scheduled show or playlist plays next. The ordinary path, doing the ordinary work.</p>
+            </div>
+            <span class="state">Normal</span>
+          </article>
+          <article class="layer">
+            <span class="layer-num">02</span>
+            <div>
+              <h3>The default</h3>
+              <p>The station’s default playlist takes over when the clock has no answer.</p>
+            </div>
+            <span class="state">Gap</span>
+          </article>
+          <article class="layer">
+            <span class="layer-num">03</span>
+            <div>
+              <h3>The safety rotation</h3>
+              <p>A prepared rotation from your library, refreshed for the worst day.</p>
+            </div>
+            <span class="state">Failure</span>
+          </article>
+          <article class="layer">
+            <span class="layer-num">04</span>
+            <div>
+              <h3>The emergency bed</h3>
+              <p>A quiet, last-resort loop. Not good radio. Better than nothing.</p>
+            </div>
+            <span class="state">Last resort</span>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section audience" id="people" aria-labelledby="people-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>05</span>The people</p></div>
+        <div>
+          <h2 id="people-title">More voice than budget.</h2>
+          <p class="lede">Sauti is for stations with a small crew and a clear reason to exist. A weekly schedule and a laptop are enough to begin.</p>
+        </div>
+      </header>
+      <div class="audience-grid">
+        <div class="people">
+          <article class="person">
+            <p class="person-tag">Community</p>
+            <h3>Community radio</h3>
+            <p>Local news, local music, local engagement</p>
+          </article>
+          <article class="person">
+            <p class="person-tag">Campus</p>
+            <h3>Campus radio</h3>
+            <p>A training ground with a real audience.</p>
+          </article>
+          <article class="person">
+            <p class="person-tag">Faith</p>
+            <h3>Faith communities</h3>
+            <p>Services, teaching, and the week between.</p>
+          </article>
+          <article class="person">
+            <p class="person-tag">Local business</p>
+            <h3>A shop station</h3>
+            <p>Your own sound, not another podcast feed.</p>
+          </article>
+          <article class="person">
+            <p class="person-tag">Music</p>
+            <h3>DJs and collectors</h3>
+            <p>A weekly home for the records you keep.</p>
+          </article>
+          <article class="person">
+            <p class="person-tag">Civic</p>
+            <h3>NGOs and civic groups</h3>
+            <p>Explainers, campaigns and community notice.</p>
+          </article>
+        </div>
+        <aside class="fit">
+          <h3>Before you apply</h3>
+          <div class="fit-group">
+            <p class="fit-label"><i></i>A good fit if you</p>
+            <ul>
+              <li>have a weekly rhythm, not just a one-off stream</li>
+              <li>are run by a small team, not a department</li>
+              <li>want live shows without a studio engineer</li>
+              <li>can bring the rights and permissions for your audio</li>
+              <li>can commit to a season of feedback and calls</li>
+            </ul>
+          </div>
+          <div class="fit-group not-yet">
+            <p class="fit-label no"><i></i>Not yet if you need</p>
+            <ul>
+              <li>ad scheduling, billing or subscriptions</li>
+              <li>browser go-live or a mobile presenter app</li>
+              <li>HLS, a CDN or a licensed FM transmitter</li>
+              <li>audience analytics beyond listener counts</li>
+            </ul>
+          </div>
+          <p class="fit-foot">One station per account during the pilot.</p>
+          <p class="fit-foot">More features will be added only after the first five finish their pilot season.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pilot" id="pilot" aria-labelledby="pilot-title">
+    <div class="wrap">
+      <header class="section-head">
+        <div><p class="section-label"><span>06</span>Pilot</p></div>
+        <div>
+          <h2 id="pilot-title">Five stations. <em>One honest season.</em></h2>
+          <p class="lede">We are opening five places to stations that will actually use Sauti. Not a demo, not a waitlist: your library, your weekly schedule, your presenters and your listeners, with us close enough to respond to artifacts and feedback.</p>
+        </div>
+      </header>
+      <div class="pilot-cards">
+        <article class="pilot-card">
+          <h3>What pilot stations get</h3>
+          <ul>
+            <li><span class="num">01</span><span>A working station on the pilot host</span></li>
+            <li><span class="num">02</span><span>Help loading and checking your library</span></li>
+            <li><span class="num">03</span><span>A weekly schedule in your time zone</span></li>
+            <li><span class="num">04</span><span>Presenter credentials and connection cards</span></li>
+            <li><span class="num">05</span><span>A public listener page and playlog export</span></li>
+            <li><span class="num">06</span><span>A direct line to the team building it</span></li>
+          </ul>
+        </article>
+        <article class="pilot-card">
+          <h3>What we ask</h3>
+          <ul>
+            <li><span class="num">01</span><span>A real station with a reason to broadcast</span></li>
+            <li><span class="num">02</span><span>A weekly rhythm you can and must sustain</span></li>
+            <li><span class="num">03</span><span>One fews minutes call every other week</span></li>
+            <li><span class="num">04</span><span>Permission to use anonymised lessons</span></li>
+            <li><span class="num">05</span><span>Patience for the first season of feedback and improvements</span></li>
+          </ul>
+        </article>
+      </div>
+      <div class="pilot-foot">
+        <div>
+          <p><strong>Five places.</strong> One station per account. If it is not a fit, we will tell you why.</p>
+          <p class="pilot-small">Pricing is not published yet. If you apply and get invited, terms are agreed in writing before setup.</p>
+        </div>
+        <a class="button button--dark" href="mailto:n42611750@gmail.com?subject=Sauti%20pilot%20application">
+          Apply for a spot
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <div class="faq-side">
+        <p class="section-label"><span>07</span>Questions</p>
+        <h2 id="faq-title">Plain answers.</h2>
+        <p class="lede">If yours is not here, write to us. A person reads it.</p>
+        <a class="contact-link" href="mailto:n42611750@gmail.com?subject=Sauti%20question">Ask a question</a>
+      </div>
+      <div class="faq-list">
+        <details open>
+          <summary>What is Sauti?</summary>
+          <div class="answer">
+            <p>A web-based control room for an internet radio station. It handles your library, weekly schedule, automated playout, live presenter takeovers, and the public stream.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Do listeners need an app?</summary>
+          <div class="answer">
+            <p>No. Each station gets a public listener page with a play button. It works in any modern browser on a phone, tablet or computer, with no account. The stream is MP3, so it also plays in standard radio and audio apps (VLC, Music Player etc) if you have the stream URL.</p>
+          </div>
+        </details>
+        <details>
+          <summary>What do I need to go live?</summary>
+          <div class="answer">
+            <p>A computer, a microphone, and a standard Icecast source client such as BUTT. Sauti gives each presenter their own connection details. Browser-based go-live is not part of the pilot.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Can I schedule in my own time zone?</summary>
+          <div class="answer">
+            <p>Yes. The weekly grid is set per station and shown in the station’s time zone. The default is Africa/Nairobi.</p>
+          </div>
+        </details>
+        <details>
+          <summary>What happens when a live show ends?</summary>
+          <div class="answer">
+            <p>Sauti detects the disconnect and hands the station back to the weekly schedule. The play log records the live block and the tracks around it. No one has to remember to press play.</p>
+          </div>
+        </details>
+        <details>
+          <summary>What if something fails?</summary>
+          <div class="answer">
+            <p>Sauti by default keeps about twenty minutes of playout planned. If the plan cannot continue, it moves through the station default playlist, a safety rotation, and finally an emergency bed. The goal is no listener visible silence while the control room recovers.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Can I play any music I like?</summary>
+          <div class="answer">
+            <p>Only if you have the rights to broadcast it. You are responsible for permissions and any public performance royalties. Sauti does not supply music licences or report royalties to collecting societies during the pilot. Start with your own recordings, music you have licensed, or appropriately licensed Creative Commons work.</p>
+          </div>
+        </details>
+        <details>
+          <summary>How much does it cost, and when can I join?</summary>
+          <div class="answer">
+            <p>The first version is in a five station pilot. Pricing is not published yet, and there is no self-service signup. If you are invited, we agree the terms in writing before setup. <a href="mailto:n42611750@gmail.com?subject=Sauti%20pilot%20application">Tell us about your station</a> if you would like one of the places.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact-inner">
       <div>
-        <p class="eyebrow">How it works</p>
-        <h2 id="how-title">From idea to on air in four steps.</h2>
+        <p class="contact-label">08 / Get in touch</p>
+        <h2 id="contact-title">Tell us what your station sounds like.</h2>
       </div>
-      <p class="lead" style="max-width:40ch">Pick a step to see what it looks like. There’s nothing to install to listen, and nothing complicated to learn.</p>
-    </div>
-
-    <div class="tabs reveal">
-      <div class="tablist" role="tablist" aria-label="The four steps">
-        <button class="tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"><span class="n">1</span>Add your music</button>
-        <button class="tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"><span class="n">2</span>Plan your week</button>
-        <button class="tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"><span class="n">3</span>Go live</button>
-        <button class="tab" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"><span class="n">4</span>Share it</button>
-      </div>
-
-      <div class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
-        <div>
-          <h3>Add your music</h3>
-          <p>Drop your songs, jingles and recorded shows into your library. Sauti reads the titles and artists, outs the volume and perform other analysis so every track sounds balanced.</p>
-          <ul>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Works with common audio files like MP3, WAV, FLAC and M4A</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Broken or silent files are flagged, so they never reach listeners</li>
-          </ul>
-          <button class="next-step js-only" type="button" data-go="2">Next: plan your week <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></button>
-        </div>
-        <div class="art a1" aria-hidden="true">
-          <svg viewBox="0 0 400 320" fill="none">
-            <rect x="40" y="40" width="320" height="240" rx="22" fill="#fff" stroke="#1B1033" stroke-width="3"/>
-            <g stroke-linecap="round">
-              <circle cx="82" cy="92" r="16" fill="#FF5A5F"/><path d="M80 98V84l8-2" stroke="#fff" stroke-width="3" fill="none"/>
-              <rect x="112" y="82" width="140" height="10" rx="5" fill="#1B1033"/><rect x="112" y="100" width="90" height="8" rx="4" fill="#C9BEE6"/><rect x="300" y="88" width="34" height="8" rx="4" fill="#C9BEE6"/>
-              <circle cx="82" cy="152" r="16" fill="#FFB020"/><path d="M80 158V144l8-2" stroke="#1B1033" stroke-width="3" fill="none"/>
-              <rect x="112" y="142" width="120" height="10" rx="5" fill="#1B1033"/><rect x="112" y="160" width="100" height="8" rx="4" fill="#C9BEE6"/><rect x="300" y="148" width="34" height="8" rx="4" fill="#C9BEE6"/>
-              <circle cx="82" cy="212" r="16" fill="#19C2AE"/><path d="M80 218V204l8-2" stroke="#fff" stroke-width="3" fill="none"/>
-              <rect x="112" y="202" width="150" height="10" rx="5" fill="#1B1033"/><rect x="112" y="220" width="70" height="8" rx="4" fill="#C9BEE6"/><rect x="300" y="208" width="34" height="8" rx="4" fill="#C9BEE6"/>
-            </g>
-            <path d="M330 30l22-22M352 8v18M352 8h-18" stroke="#1B1033" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(-6 8)"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
-        <div>
-          <h3>Plan your week</h3>
-          <p>Group your songs into playlists, then choose what plays and when. Gentle jazz for the morning commute, an eveining drive show, hits for Friday night, a talk show on Sunday. Whatever you desire</p>
-          <ul>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Play playlists in order or shuffled, and drop in jingles regularly</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Set it once and Sauti follows your timetable and schedule every week</li>
-          </ul>
-          <button class="next-step js-only" type="button" data-go="3">Next: go live <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></button>
-        </div>
-        <div class="art a2" aria-hidden="true">
-          <svg viewBox="0 0 400 320" fill="none">
-            <rect x="30" y="40" width="340" height="240" rx="22" fill="#fff" stroke="#1B1033" stroke-width="3"/>
-            <g stroke="#E7E0F6" stroke-width="2"><path d="M30 86h340M96 40v240M162 40v240M228 40v240M294 40v240"/></g>
-            <g fill="#1B1033"><rect x="46" y="58" width="36" height="8" rx="4"/><rect x="112" y="58" width="36" height="8" rx="4"/><rect x="178" y="58" width="36" height="8" rx="4"/><rect x="244" y="58" width="36" height="8" rx="4"/><rect x="310" y="58" width="36" height="8" rx="4"/></g>
-            <rect x="42" y="100" width="46" height="70" rx="10" fill="#FFB020"/><rect x="108" y="130" width="46" height="110" rx="10" fill="#FF5A5F"/>
-            <rect x="174" y="100" width="46" height="50" rx="10" fill="#19C2AE"/><rect x="174" y="164" width="46" height="80" rx="10" fill="#3B2A6B"/>
-            <rect x="240" y="116" width="46" height="100" rx="10" fill="#FFB020"/><rect x="306" y="100" width="46" height="60" rx="10" fill="#FF5A5F"/><rect x="306" y="174" width="46" height="70" rx="10" fill="#19C2AE"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
-        <div>
-          <h3>Go live whenever you like </h3>
-          <p>Want to talk to your listeners? Report some news or trend?  Connect a free broadcasting app on your computer, and your voice goes straight on air. When you finish, the music picks up right where the schedule left off.</p>
-          <ul>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Your Live page shows exactly what to type into the broadcasting app</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>Give each presenter their own login credentials, and cancel it any time</li>
-          </ul>
-          <button class="next-step js-only" type="button" data-go="4">Next: share it <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></button>
-        </div>
-        <div class="art a3" aria-hidden="true">
-          <svg viewBox="0 0 400 320" fill="none">
-            <g stroke="#1B1033" stroke-width="3" stroke-linecap="round"><path d="M110 120a90 90 0 000 0" /></g>
-            <rect x="160" y="50" width="80" height="140" rx="40" fill="#fff" stroke="#1B1033" stroke-width="3"/>
-            <path d="M175 90h50M175 110h50M175 130h50" stroke="#C9BEE6" stroke-width="3" stroke-linecap="round"/>
-            <path d="M120 150a80 80 0 00160 0M200 230v40M150 270h100" stroke="#1B1033" stroke-width="3" stroke-linecap="round" fill="none"/>
-            <g stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9"><path d="M90 100q-14 40 0 80M62 85q-26 55 0 110"/><path d="M310 100q14 40 0 80M338 85q26 55 0 110"/></g>
-            <rect x="152" y="14" width="96" height="30" rx="15" fill="#FF5A5F"/><circle cx="174" cy="29" r="5" fill="#fff"/><text x="190" y="34" font-family="ui-monospace,Menlo,monospace" font-size="14" font-weight="700" fill="#fff">LIVE</text>
-          </svg>
-        </div>
-      </div>
-
-      <div class="panel" role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
-        <div>
-          <h3>Share it with and to the world</h3>
-          <p>Every station gets its own page with a play button, what’s playing right now and what is scheduled up next. Send the link to your listeners, or embed the player on your website. Sauti keeps the music flowing even if your internet connection wobbles.</p>
-          <ul>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>No app to install and no account for listeners</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>The player reconnects by itself if the internet wobbles</li>
-          </ul>
-          <a class="next-step" href="#news">See what’s new <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <div class="art a4" aria-hidden="true">
-          <svg viewBox="0 0 400 320" fill="none">
-            <rect x="128" y="20" width="144" height="280" rx="26" fill="#fff" stroke="#1B1033" stroke-width="3"/>
-            <rect x="176" y="32" width="48" height="6" rx="3" fill="#1B1033"/>
-            <text x="200" y="84" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="800" fill="#1B1033">Sunrise FM</text>
-            <circle cx="200" cy="160" r="40" fill="#FF5A5F"/><path d="M190 142l28 18-28 18z" fill="#fff"/>
-            <g stroke="#19C2AE" stroke-width="4" stroke-linecap="round"><path d="M148 160q-8 0-8 0"/></g>
-            <rect x="152" y="228" width="96" height="9" rx="4.5" fill="#1B1033"/><rect x="164" y="246" width="72" height="8" rx="4" fill="#C9BEE6"/>
-            <g stroke="#1B1033" stroke-width="3" stroke-linecap="round" opacity=".5"><path d="M92 150q-14 10 0 20M70 138q-26 22 0 44"/><path d="M308 150q14 10 0 20M330 138q26 22 0 44"/></g>
-          </svg>
-        </div>
+      <div class="contact-copy">
+        <p>Its domain, Its name, its week, the people behind the mic. That is enough to start a conversation about the pilot.</p>
+        <p>We will read every email and respond personally. No auto-replies, no form spam, no newsletter.</p>
+        <a class="contact-email" href="mailto:n42611750@gmail.com?subject=Sauti%20station">Contact us</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============ FEATURES ============ -->
-<section class="features sec" id="features" aria-labelledby="feat-title">
-  <div class="wrap">
-    <div class="head reveal">
-      <p class="eyebrow">What’s inside</p>
-      <h2 id="feat-title">Everything a station needs. Nothing it doesn’t.</h2>
-    </div>
-    <div class="cards">
-      <article class="card reveal" style="--glow:#FFE5E6">
-        <span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>
-        <h3>Your own music library</h3>
-        <p>Upload your songs, jingles and shows and keep them tidy in one place. Sauti balances the volume so nothing blasts or whispers.</p>
-      </article>
-      <article class="card reveal" data-d="1" style="--glow:#FFF0D1">
-        <span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h13M3 12h13M3 18h8"/><path d="M19 15v6M16 18h6" /></svg></span>
-        <h3>Playlists that think for you</h3>
-        <p>Play in order or shuffle, and slip in a jingle every few songs. Build a playlist once and let it run.</p>
-      </article>
-      <article class="card reveal" data-d="2" style="--glow:#D7F5F0">
-        <span class="ic c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
-        <h3>A schedule for every day</h3>
-        <p>Different sounds for mornings, evenings and weekends. Your weekly timetable runs itself, in your own time zone.</p>
-      </article>
-      <article class="card reveal" style="--glow:#E8E1FF">
-        <span class="ic c4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></span>
-        <h3>Go live in one step</h3>
-        <p>Presenters connect and take over the airwaves. When they finish, your scheduled music returns automatically.</p>
-      </article>
-      <article class="card reveal" data-d="1" style="--glow:#FFE5E6">
-        <span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
-        <h3>A safety net under it all</h3>
-        <p>If nothing is scheduled or something goes wrong, Sauti plays from your own library, and a gentle backup loop as a last resort, so listeners don’t hear dead silence.</p>
-      </article>
-      <article class="card reveal" data-d="2" style="--glow:#FFF0D1">
-        <span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
-        <h3>A page for your listeners</h3>
-        <p>Each station gets a simple page with a play button and the song playing now. It works on phones, tablets and computers.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ============ LATEST UPDATES ============ -->
-<section class="news dark sec" id="news" aria-labelledby="news-title">
-  <div class="wrap">
-    <div class="reveal">
-      <p class="eyebrow">Latest updates</p>
-      <h2 id="news-title">What we’ve built, and what’s next.</h2>
-      <p class="lead">Sauti is getting ready to launch the pilot. Here’s where things stand.</p>
-    </div>
-    <div class="filters reveal" role="group" aria-label="Filter updates">
-      <button type="button" data-filter="all" aria-pressed="true">All updates</button>
-      <button type="button" data-filter="done" aria-pressed="false">Done</button>
-      <button type="button" data-filter="soon" aria-pressed="false">Coming up</button>
-    </div>
-    <ol class="timeline" id="timeline">
-      <li class="post reveal" data-kind="done">
-        <div class="meta"><span class="kind">Done</span><br><time datetime="2026-10">October 2026</time></div>
-        <div>
-          <h3>The first version is ready</h3>
-          <p>The essentials work end to end: We are now in the process of load testing and preparing for the pilot. The first version of Sauti is ready to run a station, and we are actively looking for stations to join the pilot.</p>
-        </div>
-      </li>
-      <li class="post reveal" data-kind="soon">
-        <div class="meta"><span class="kind">Coming up</span><br>Next</div>
-        <div>
-          <h3>A small pilot with real stations</h3>
-          <p>Before opening up to everyone, we’ll run Sauti with a small group of stations to learn what works and recive actual feedback. We are actively looking for stations to join the pilot. If you are interested, please <a href="mailto:n42611750@gmail.com">contact us</a>.</p>
-        </div>
-      </li>
-      <li class="post reveal" data-kind="soon">
-        <div class="meta"><span class="kind">Coming up</span><br>Planned</div>
-        <div>
-          <h3>A review of the user policy and terms of service</h3>
-          <p>We want to make sure Sauti is a safe and welcoming space for everyone. We’ll review the user policy and terms of service through out the pilot to make sure they are clear, fair, inclusive and in accordance with broadcasting laws.</p>
-        </div>
-      </li>
-      <li class="post reveal" data-kind="soon">
-        <div class="meta"><span class="kind">Coming up</span><br>Planned</div>
-        <div>
-          <h3>More features and improvements</h3>
-          <p>We’ll continue to improve Sauti based on feedback from the pilot. Some of the things we are considering include: a mobile app for presenters, more ways to schedule shows, and more ways to share your station.</p>
-        </div>
-    </ol>
-    <p class="fine">Plans change as we learn. We’ll always update this list first.</p>
-  </div>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section class="faq sec" id="faq" aria-labelledby="faq-title">
-  <div class="wrap faq-grid">
-    <div class="faq-side reveal">
-      <p class="eyebrow">Questions</p>
-      <h2 id="faq-title">Questions, plain answers.</h2>
-      <p class="lead">Tap a question to see the answer. Can’t find yours? Check the latest updates, or <a href="mailto:n42611750@gmail.com">contact us</a>.</p>
-    </div>
-    <div class="faq-list" id="faq-list">
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a1" id="q1">What is Sauti? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a1" role="region" aria-labelledby="q1"><div><p>Sauti is a simple way to run your own internet radio station. You upload your music, plan what plays and when, and go live whenever you want to speak. Listeners tune in through a web page.</p></div></div></div>
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a2" id="q2">Do I need technical skills? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a2" role="region" aria-labelledby="q2"><div><p>No. Uploading music, making playlists and setting a schedule all happen in your browser. Going live uses a free broadcasting app on your computer, and Sauti shows you exactly what to enter into it.</p></div></div></div>
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a3" id="q3">What happens if nothing is scheduled, or something goes wrong? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a3" role="region" aria-labelledby="q3"><div><p>Sauti has a safety net. It plays your scheduled music first, then music from your own library, and as a last resort a gentle built-in loop. If a presenter’s connection drops, the station goes back to your scheduled music.</p></div></div></div>
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a4" id="q4">Can people listen on their phones? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a4" role="region" aria-labelledby="q4"><div><p>Yes. Each station has its own page that works in a modern browser on a phone, tablet or computer. Listeners just press play. There’s nothing to install and no account to create.</p></div></div></div>
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a5" id="q5">Can I play any music I like? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a5" role="region" aria-labelledby="q5"><div><p>You are responsible for having permission to broadcast what you upload. You require a licences or permission to playing and broadcast commercial music publicly. If you’re unsure, start with your own recordings, music you’ve licensed, or Creative Commons tracks.</p></div></div></div>
-      <div class="q reveal"><h3><button type="button" aria-expanded="false" aria-controls="a6" id="q6">When can I try it, and what will it cost? <span class="plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></button></h3>
-        <div class="a" id="a6" role="region" aria-labelledby="q6"><div><p>The first version is ready, and we’re starting with a small pilot. Pricing hasn’t been announced yet. We’ll share both in the latest updates above.</p></div></div></div>
-    </div>
-  </div>
-</section>
+  </section>
 </main>
 
-<section class="contact sec" aria-labelledby="contact-title">
-  <div class="wrap contact-box reveal">
-    <div>
-      <p class="eyebrow">Contact us</p>
-      <h2 id="contact-title">Let’s talk about your station.</h2>
-    </div>
-    <div>
-      <p>Whether you’re exploring Sauti for a new station, joining the pilot, or asking a question, we’d love to hear from you.</p>
-      <p><a href="mailto:n42611750@gmail.com">Sauti Contact</a></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="dark" id="footer">
+<footer class="footer" id="footer">
   <div class="wrap">
-    <div class="fgrid">
+    <div class="footer-top">
       <div>
-        <p class="tagline">Your voice, on air.</p>
-        <p>Sauti makes internet radio simple for everyone: music, schedule and live shows in one friendly place.</p>
+        <a class="brand" href="#top" aria-label="Sauti, back to the top">
+          <svg class="brand-mark" viewBox="0 0 40 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
+            <path d="M2 16h4M10 9v14M17 3v26M24 11v10M31 7v18M38 14v4"/>
+          </svg>
+          <span class="brand-word">Sauti</span>
+          <span class="brand-sub">Internet radio<br>for real stations</span>
+        </a>
+        <p><strong>Sauti.</strong> Internet radio for stations with something to say. Built around the week, the handover, the quiet work in between, the people who make it happen and the listeners who tune in.</p>
       </div>
-      <nav aria-label="Footer">
-        <h3>Explore</h3>
-        <ul>
-          <li><a href="#about">About us</a></li>
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#news">Latest updates</a></li>
-          <li><a href="#faq">Questions</a></li>
-        </ul>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#station">The station</a>
+        <a href="#week">The week</a>
+        <a href="#desk">The desk</a>
+        <a href="#fallbacks">Fallbacks</a>
+        <a href="#pilot">Pilot</a>
+        <a href="#faq">Questions</a>
+        <a href="mailto:n42611750@gmail.com?subject=Sauti%20enquiry">Email</a>
       </nav>
-      <div>
-        <h3>Good to know</h3>
-        <ul>
-          <li>Sauti carries the idea of speech, sound, and the spoken word perfect for radio and  public communication.</li>
-          <li>This page is lightweight, private, and free of sign-up prompts, cookies, and trackers.</li>
-          <li id="contact-line">Broadcast news and updates appear in <a href="#news">Latest updates</a>.</li>
-        </ul>
-      </div>
+      <p>Pilot season / 2026<br>Five places. One station per account.</p>
     </div>
-    <div class="big" aria-hidden="true">Sauti</div>
-    <div class="bottom">
+    <div class="footer-word" aria-hidden="true">Sauti<span>.</span></div>
+    <div class="footer-bottom">
       <span>© 2026 Sauti. All rights reserved.</span>
-      <a class="totop" href="#top">Back to top <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V3M3 8l5-5 5 5"/></svg></a>
+      <span>Built by <a href="https://www." target="_blank" rel="noopener">Zero Studio</a> in Nairobi, Kenya.</span>
+      <a href="#top">Back to top ↑</a>
     </div>
   </div>
 </footer>
-
-<script>
-(function(){
+<script id="app-script">
+(function () {
   'use strict';
-  /* Set this to a real address to show a contact link in the footer. Leave empty to hide it. */
-  var CONTACT_EMAIL = '';
 
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var $ = function(s, r){ return (r||document).querySelector(s); };
-  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var demo = document.getElementById('demo');
+  if (demo) {
+    var wave = document.getElementById('demo-wave');
+    var status = document.getElementById('demo-status');
+    var title = document.getElementById('demo-title');
+    var meta = document.getElementById('demo-meta');
+    var note = document.getElementById('demo-note');
+    var buttons = Array.prototype.slice.call(demo.querySelectorAll('.console-switch button'));
 
-  /* optional contact link */
-  if (CONTACT_EMAIL) {
-    var li = $('#contact-line');
-    if (li) li.innerHTML = 'Say hello: <a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>';
-  }
-
-  /* header height drives the scroll offset */
-  var header = $('.console');
-  function setHeaderH(){ document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px'); }
-  setHeaderH(); window.addEventListener('resize', setHeaderH);
-
-  /* smooth scroll for in-page links (also moves focus for keyboard and screen-reader users) */
-  $$('a[href^="#"]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      var id = a.getAttribute('href').slice(1);
-      var target = id ? document.getElementById(id) : document.body;
-      if (!target) return;
-      e.preventDefault();
-      var y = id === 'top' || !id ? 0 : target.getBoundingClientRect().top + window.scrollY - header.offsetHeight + 1;
-      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
-      if (history.replaceState) history.replaceState(null, '', id && id !== 'top' ? '#' + id : location.pathname + location.search);
-      if (id !== 'top') { target.setAttribute('tabindex','-1'); target.focus({ preventScroll: true }); }
-    });
-  });
-
-  /* ---------- the tuning dial ---------- */
-  var stops = $$('.dial a'), scale = $('.scale'), needle = $('.needle'), tuned = $('#tuned');
-  var names = ['Home','About','How it works','News','Questions'];
-  var secs = ['hero','about','how','news','faq'].map(function(id){ return document.getElementById(id); });
-  var centers = [], tops = [], lastIdx = -1, ticking = false;
-
-  function measure(){
-    var base = scale.getBoundingClientRect().left;
-    centers = stops.map(function(a){ var r = a.getBoundingClientRect(); return r.left - base + r.width/2; });
-    tops = secs.map(function(s){ return s.getBoundingClientRect().top + window.scrollY; });
-  }
-  function smooth(t){ t = Math.min(1, Math.max(0, (t - 0.6) / 0.4)); return t*t*(3 - 2*t); }
-  function tune(){
-    ticking = false;
-    var probe = window.scrollY + header.offsetHeight + window.innerHeight * 0.35;
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) probe = tops[tops.length-1] + 1;
-    var i = 0;
-    for (var k = 0; k < tops.length; k++) if (probe >= tops[k]) i = k;
-    var t = 0;
-    if (i < tops.length - 1) t = smooth((probe - tops[i]) / (tops[i+1] - tops[i]));
-    var x = centers[i] + (centers[Math.min(i+1, centers.length-1)] - centers[i]) * t;
-    needle.style.setProperty('--x', (x - 1) + 'px');
-    var active = t > 0.5 ? i + 1 : i;
-    if (active !== lastIdx) {
-      lastIdx = active;
-      stops.forEach(function(a, n){ if (n === active) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
-      tuned.textContent = names[active];
+    for (var i = 0; i < 22; i += 1) {
+      var bar = document.createElement('i');
+      bar.style.setProperty('--h', (22 + Math.random() * 70).toFixed(0) + '%');
+      bar.style.setProperty('--speed', (0.65 + Math.random() * 1.05).toFixed(2) + 's');
+      bar.style.setProperty('--delay', (-Math.random() * 1.8).toFixed(2) + 's');
+      wave.appendChild(bar);
     }
-  }
-  function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(tune); } }
-  function remeasure(){ setHeaderH(); measure(); tune(); }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', remeasure);
-  window.addEventListener('load', remeasure);
-  measure(); tune();
 
-  /* ---------- hero demo ---------- */
-  var eq = $('#eq');
-  for (var b = 0; b < 28; b++) {
-    var bar = document.createElement('i');
-    bar.style.setProperty('--h', (35 + Math.round(Math.random()*60)) + '%');
-    bar.style.setProperty('--t', (0.7 + Math.random()*0.9).toFixed(2) + 's');
-    bar.style.setProperty('--dl', (-Math.random()*1.5).toFixed(2) + 's');
-    eq.appendChild(bar);
+    var states = {
+      live: {
+        status: 'Live / desk open',
+        title: 'The Long Way Home',
+        meta: 'Amina W. at the desk · live from Nairobi',
+        note: 'When Amina closes the desk, the schedule takes over by itself. No one has to press play.'
+      },
+      auto: {
+        status: 'On air / automation',
+        title: 'Nia — Kaana',
+        meta: 'From the weekly schedule · 15:00 EAT',
+        note: 'Live always preempts automation. When the desk closes, Sauti picks the schedule back up.'
+      }
+    };
+
+    var setMode = function (mode) {
+      var state = states[mode];
+      if (!state) return;
+      demo.setAttribute('data-mode', mode);
+      status.textContent = state.status;
+      title.textContent = state.title;
+      meta.textContent = state.meta;
+      note.textContent = state.note;
+      buttons.forEach(function (button) {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-mode') === mode));
+      });
+    };
+
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        setMode(button.getAttribute('data-mode'));
+      });
+    });
   }
-  var station = $('#station'), pillText = $('#pill-text'), now = $('#now'), next = $('#next');
-  var copy = {
-    auto: { pill: 'On air · Auto-pilot', now: 'Playing: Morning Light', next: 'Your playlist is on automation. Next up on schedule at 18:00: Evening Drive.' },
-    live: { pill: 'Live now', now: 'Amina is live from her laptop', next: 'Sauti pauses the playlist while she is live, then picks up where it left off when she finishes.' },
+
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+  var sections = navLinks.map(function (link) {
+    return document.querySelector(link.getAttribute('href'));
+  }).filter(Boolean);
+  var queued = false;
+
+  var markSection = function () {
+    queued = false;
+    var probe = window.scrollY + 150;
+    var current = null;
+    sections.forEach(function (section) {
+      if (section.offsetTop <= probe) current = section;
+    });
+    navLinks.forEach(function (link) {
+      if (current && link.getAttribute('href') === '#' + current.id) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
   };
-  $$('.seg button', station).forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var m = btn.getAttribute('data-mode');
-      station.setAttribute('data-mode', m);
-      $$('.seg button', station).forEach(function(o){ o.setAttribute('aria-pressed', String(o === btn)); });
-      pillText.textContent = copy[m].pill; now.textContent = copy[m].now; next.textContent = copy[m].next;
-    });
-  });
 
-  /* ---------- steps (tabs) ---------- */
-  var tabs = $$('.tab'), panels = $$('.panel');
-  function selectTab(i, focus){
-    tabs.forEach(function(t, n){
-      var on = n === i;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;
-      panels[n].hidden = !on;
-    });
-    if (focus) tabs[i].focus();
-  }
-  tabs.forEach(function(t, i){
-    t.addEventListener('click', function(){ selectTab(i); });
-    t.addEventListener('keydown', function(e){
-      var n = tabs.length, k = e.key, j = null;
-      if (k === 'ArrowRight' || k === 'ArrowDown') j = (i + 1) % n;
-      else if (k === 'ArrowLeft' || k === 'ArrowUp') j = (i - 1 + n) % n;
-      else if (k === 'Home') j = 0; else if (k === 'End') j = n - 1;
-      if (j !== null) { e.preventDefault(); selectTab(j, true); }
-    });
-  });
-  $$('[data-go]').forEach(function(btn){
-    btn.addEventListener('click', function(){ selectTab(Number(btn.getAttribute('data-go')) - 1, true); });
-  });
-  selectTab(0);
+  var onScroll = function () {
+    if (queued) return;
+    queued = true;
+    window.requestAnimationFrame(markSection);
+  };
 
-  /* ---------- updates filter ---------- */
-  var posts = $$('#timeline .post');
-  $$('.filters button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var f = btn.getAttribute('data-filter');
-      $$('.filters button').forEach(function(o){ o.setAttribute('aria-pressed', String(o === btn)); });
-      posts.forEach(function(p){ p.hidden = !(f === 'all' || p.getAttribute('data-kind') === f); });
-      measure(); tune();
-    });
-  });
-
-  /* ---------- FAQ accordion (one open at a time) ---------- */
-  var qs = $$('.q');
-  qs.forEach(function(q){
-    var btn = $('button', q);
-    btn.addEventListener('click', function(){
-      var open = !q.classList.contains('open');
-      qs.forEach(function(o){ o.classList.remove('open'); $('button', o).setAttribute('aria-expanded','false'); });
-      if (open) { q.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
-      setTimeout(function(){ measure(); tune(); }, 450);
-    });
-  });
-
-  /* ---------- reveal on scroll ---------- */
-  var items = $$('.reveal');
-  if ('IntersectionObserver' in window && !reduce) {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    items.forEach(function(el){ io.observe(el); });
-  } else {
-    items.forEach(function(el){ el.classList.add('in'); });
-  }
-})();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  markSection();
+}());
 </script>
-<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </body>
 </html>
